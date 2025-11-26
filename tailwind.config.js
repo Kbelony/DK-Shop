@@ -52,10 +52,16 @@ export default {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
-  			}
+  			},
+  			sand: "#f4efe5",
+  			ember: "#c4612b",
+  			deep: "#1e1b16"
+  		},
+  		fontFamily: {
+  			heading: ['"Inter Display"', '"Inter"', "sans-serif"],
+  			body: ['"Inter Display"', '"Inter"', "sans-serif"]
   		}
   	}
   },
   plugins: [require("tailwindcss-animate")],
 }
-
