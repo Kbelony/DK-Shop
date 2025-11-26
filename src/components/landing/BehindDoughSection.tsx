@@ -34,38 +34,62 @@ export function BehindDoughSection() {
   return (
     <section className="space-y-12 lg:grid lg:grid-cols-[0.55fr_0.45fr] lg:gap-16">
       <div className="space-y-12 pl-2 sm:pl-4 lg:pl-8">
-        <div className="space-y-3">
-          <p className="text-xs uppercase tracking-[0.5em] text-deep/50">Behind the dough</p>
+        <div className="space-y-3 pb-12">
+          <p className="text-xs uppercase tracking-[0.5em] text-deep/50">
+            Behind the dough
+          </p>
           <p className="max-w-md text-base text-deep/70">
-            Make, Bake, Eat — un triptyque qui reste pendant que les images se succèdent à droite.
+            Make, Bake, Eat — un triptyque qui reste pendant que les images se
+            succèdent à droite.
           </p>
         </div>
         <div className="space-y-28">
           {steps.map((step, index) => (
-          <motion.article
-            key={step.title}
-            initial={{ opacity: 0, y: 36 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ amount: 0.6, once: false }}
-            onViewportEnter={() => setActiveIndex(index)}
-            className="space-y-6"
-          >
-            <div className="flex items-end gap-4">
-              <h3 className="font-heading text-[4.5rem] leading-[0.9]">{step.title}</h3>
-              <span className="text-lg text-deep/50">{step.number}</span>
-            </div>
-            <p className="font-heading text-base uppercase tracking-[0.5em] text-deep/50">{step.label}</p>
-            <p className="text-lg leading-relaxed text-deep/80">{step.copy}</p>
-            <div className="overflow-hidden rounded-[40px] border border-[#e1d7c8] lg:hidden">
-              <img src={step.image} alt={step.title} className="h-64 w-full object-cover" />
-            </div>
+            <motion.article
+              key={step.title}
+              initial={{ opacity: 0, y: 36 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ amount: 0.6, once: false }}
+              onViewportEnter={() => setActiveIndex(index)}
+              className="space-y-6"
+            >
+              <div className="flex items-end gap-4">
+                <h3
+                  className="font-heading text-[6.5rem] font-extrabold leading-[0.9]"
+                  style={{
+                    fontFamily:
+                      '"Inter Display", "Inter Display Placeholder", sans-serif',
+                  }}
+                >
+                  {step.title}
+                </h3>
+                <span className="text-lg text-deep/50">{step.number}</span>
+              </div>
+              <p
+                className="font-heading text-base uppercase tracking-[0.5em] text-deep/50"
+                style={{
+                  fontFamily: '"DM Sans","DM Sans Placeholder",sans-serif',
+                }}
+              >
+                {step.label}
+              </p>
+              <p className="text-lg leading-relaxed text-deep/80 pb-40">
+                {step.copy}
+              </p>
+              <div className="overflow-hidde border border-[#e1d7c8] lg:hidden">
+                <img
+                  src={step.image}
+                  alt={step.title}
+                  className="h-64 w-full object-cover"
+                />
+              </div>
             </motion.article>
           ))}
         </div>
       </div>
 
       <div className="relative hidden lg:block">
-        <div className="sticky top-32 h-[420px] overflow-hidden rounded-[56px] border border-[#e1d7c8] shadow-lg">
+        <div className="sticky top-32 h-[420px] overflow-hidden  border border-[#e1d7c8] shadow-lg">
           {steps.map((step, index) => (
             <motion.img
               key={step.title}

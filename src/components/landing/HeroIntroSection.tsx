@@ -30,8 +30,11 @@ export function HeroIntroSection() {
             whileInView="show"
             viewport={{ once: true, amount: 0.7 }}
             custom={1}
-            className="text-[clamp(3.5rem,8vw,7rem)] font-bold leading-[0.95] text-deep"
-            style={{ fontFamily: '"DM Sans","DM Sans Placeholder",sans-serif' }}
+            className="text-[clamp(3.5rem,8vw,8rem)] font-extrabold leading-[0.95] tracking-[-4px] text-deep"
+            style={{
+              fontFamily:
+                '"Inter Display", "Inter Display Placeholder", sans-serif',
+            }}
           >
             Pour, make, bake, <span className="text-[#B0562B]">share.</span>
           </motion.h1>
@@ -42,12 +45,14 @@ export function HeroIntroSection() {
           whileInView="show"
           viewport={{ once: true, amount: 0.6 }}
           custom={2}
-          className="max-w-sm text-[1.5rem] font-semibold leading-[1.2] text-[#141415] lg:ml-auto lg:pt-4"
+          className="max-w-sm text-[1.3rem] font-semibold leading-[1.2] text-[#141415] lg:ml-auto lg:pt-28"
           style={{ fontFamily: '"DM Sans","DM Sans Placeholder",sans-serif' }}
         >
           <p>
-            Nous travaillons en duo texte &amp; gestes : l&apos;un raconte l&apos;origine des grains, l&apos;autre surveille les
-            flammes. Ensemble, on compose des moments simples, presque pauvres dans la forme, riches dans le goût.
+            Nous travaillons en duo texte &amp; gestes : l&apos;un raconte
+            l&apos;origine des grains, l&apos;autre surveille les flammes.
+            Ensemble, on compose des moments simples, presque pauvres dans la
+            forme, riches dans le goût.
           </p>
         </motion.div>
       </div>

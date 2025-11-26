@@ -114,14 +114,21 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
                   opacity: index === 2 ? 1 : siblingsOpacity,
                 }}
               >
-                <img src={slide.src} alt={slide.caption} className="h-full w-full object-cover" />
+                <img
+                  src={slide.src}
+                  alt={slide.caption}
+                  className="h-full w-full object-cover"
+                />
               </motion.div>
             ))}
           </motion.div>
         )}
 
         {/* Carousel phase: full screen */}
-        <motion.div style={{ opacity: carouselOpacity }} className="absolute inset-0">
+        <motion.div
+          style={{ opacity: carouselOpacity }}
+          className="absolute inset-0"
+        >
           <img
             key={allSlides[activeSlide].src}
             src={allSlides[activeSlide].src}
@@ -132,8 +139,18 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
 
           {/* Text centered at bottom */}
           <div className="absolute inset-0 flex flex-col items-center justify-end px-6 pb-14 text-center space-y-3">
-            <p className="text-xs uppercase tracking-[0.6em] text-white/70 font-bold">THE ORIGIN</p>
-            <h3 className="font-heading text-4xl lg:text-5xl font-bold leading-tight">{allSlides[activeSlide].caption}</h3>
+            <p className="text-xs uppercase tracking-[0.6em] text-white/70 font-bold">
+              THE ORIGIN
+            </p>
+            <h3
+              className="font-heading text-4xl lg:text-5xl font-extrabold leading-tight pb-10 lg:pb-4"
+              style={{
+                fontFamily:
+                  '"Inter Display", "Inter Display Placeholder", sans-serif',
+              }}
+            >
+              {allSlides[activeSlide].caption}
+            </h3>
           </div>
 
           {/* Navigation arrows */}
@@ -158,8 +175,12 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
 
           {/* Status + pagination at bottom */}
           <div className="absolute bottom-8 left-6 right-6 flex items-center justify-between text-sm uppercase tracking-[0.4em] text-white/70 font-bold">
-            <span>{activeSlide + 1}/{allSlides.length}</span>
-            <span className="flex-1 text-center">SCROLL STOPPED — EXPLORE MANUALLY</span>
+            <span>
+              {activeSlide + 1}/{allSlides.length}
+            </span>
+            <span className="flex-1 text-center">
+              SCROLL STOPPED — EXPLORE MANUALLY
+            </span>
             <span className="w-12" />
           </div>
         </motion.div>

@@ -21,13 +21,25 @@ export function Navbar({ translucent = false }: NavbarProps) {
       >
         <div className="mx-auto flex w-full items-center justify-between gap-4 px-4 py-5 sm:px-6 lg:px-10">
           <div className="space-y-1">
-            <p className={clsx("font-heading text-sm uppercase tracking-[0.4em]", translucent ? "text-ember/80" : "text-ember")}>
+            <p
+              className={clsx(
+                "font-heading text-sm uppercase tracking-[0.4em]",
+                translucent ? "text-ember/80" : "text-ember"
+              )}
+            >
               Bakeat
             </p>
-            <p className={clsx("text-xs uppercase tracking-[0.4em]", subText)}>Handmade ovens &amp; crumbs since 1998</p>
+            <p className={clsx("text-xs uppercase tracking-[0.4em]", subText)}>
+              Handmade ovens &amp; crumbs since 1998
+            </p>
           </div>
 
-          <div className={clsx("hidden items-center gap-6 text-xs uppercase tracking-[0.35em] sm:flex", subText)}>
+          <div
+            className={clsx(
+              "hidden items-center gap-6 text-xs uppercase tracking-[0.35em] sm:flex",
+              subText
+            )}
+          >
             <span>London, UK</span>
             <span>Open 8 — 4</span>
           </div>
@@ -36,15 +48,27 @@ export function Navbar({ translucent = false }: NavbarProps) {
             onClick={() => setOpen(true)}
             className={clsx(
               "flex items-center gap-3 rounded-full border px-5 py-2 font-heading text-base transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
-              translucent ? "border-white/40 text-white hover:border-white" : "border-deep/30 text-deep hover:border-deep/60"
+              translucent
+                ? "border-white/40 text-white hover:border-white"
+                : "border-deep/30 text-deep hover:border-deep/60"
             )}
             data-cursor="focus"
             aria-label="Open navigation menu"
           >
             Menu
-            <span className="relative h-4 w-4">
-              <span className={clsx("absolute inset-x-0 top-0 h-[2px]", textColor === "text-white" ? "bg-white" : "bg-deep")} />
-              <span className={clsx("absolute inset-x-0 bottom-0 h-[2px]", textColor === "text-white" ? "bg-white" : "bg-deep")} />
+            <span className="relative h-3 w-4">
+              <span
+                className={clsx(
+                  "absolute inset-x-0 top-0 h-[2px]",
+                  textColor === "text-white" ? "bg-white" : "bg-deep"
+                )}
+              />
+              <span
+                className={clsx(
+                  "absolute inset-x-0 bottom-0 h-[2px]",
+                  textColor === "text-white" ? "bg-white" : "bg-deep"
+                )}
+              />
             </span>
           </button>
         </div>
