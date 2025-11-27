@@ -65,7 +65,7 @@ export function HeroIntroSection() {
         className="overflow-hidden border border-[#e1d7c8]"
       >
         <img
-          src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1800&q=80"
+          src="https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/001_1U1A0815_DEBORA.jpg?raw=true"
           alt="Bakeat atelier"
           className="h-[700px] w-full object-cover"
         />

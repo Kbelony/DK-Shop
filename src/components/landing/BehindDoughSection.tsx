@@ -113,10 +113,3 @@ export function BehindDoughSection() {
     </section>
   );
 }
-
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
