@@ -4,17 +4,17 @@ const artisans = [
   {
     name: "Lucie Perrin",
     role: "Cheffe boulangère",
-    img: "src/assets/img/018_1U1A0987_DEBORA_Original-min.jpg",
+    img: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/018_1U1A0987_DEBORA_Original.jpg?raw=true",
   },
   {
     name: "Elliot Marchand",
     role: "Maître torréfacteur",
-    img: "src/assets/img/_DSC1423-min.jpg",
+    img: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/016_1U1A0977_DEBORA_Original.jpg?raw=true",
   },
   {
     name: "Sana Roussel",
     role: "Fermentation & R&D",
-    img: "src/assets/img/016_1U1A0977_DEBORA_Original-min.jpg",
+    img: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/_DSC1423.jpg?raw=true",
   },
 ];
 

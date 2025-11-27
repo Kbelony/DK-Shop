@@ -3,25 +3,28 @@ import { motion } from "framer-motion";
 
 const steps = [
   {
-    title: "Make",
+    title: "Dresses",
     number: "01",
     label: "/Finest ingredients",
     copy: "At Bakeat, every creation starts with the finest ingredients and a passion for perfection. Our bakers carefully mix each batch with love, ensuring the perfect balance of flavors and textures. From the very first step, we pour our hearts into crafting something truly special.",
-    image: "src/assets/img/_DSC1423-min.jpg",
+    image:
+      "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/_DSC1423.jpg?raw=true",
   },
   {
-    title: "Bake",
+    title: "Jackets",
     number: "02",
     label: "/Wood-fired balance",
     copy: "Les pains reposent sur pierre, les braises sont rassemblées d'un côté pour créer une chaleur douce qui caramélise la croûte sans brûler.",
-    image: "src/assets/img/009_1U1A0904_DEBORA_Original-min.jpg",
+    image:
+      "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/009_1U1A0904_DEBORA_Original.jpg?raw=true",
   },
   {
-    title: "Eat",
+    title: "Pants",
     number: "03",
     label: "/Savor together",
     copy: "On sert chaud sur des tables communes avec beurre battu maison et confitures fermentées. Chaque service raconte une histoire.",
-    image: "src/assets/img/IMG_7186-min.jpg",
+    image:
+      "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/IMG_7186.jpg?raw=true",
   },
 ];
 
