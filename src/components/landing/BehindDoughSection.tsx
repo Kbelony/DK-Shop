@@ -73,9 +73,16 @@ export function BehindDoughSection() {
               >
                 {step.label}
               </p>
-              <p className="text-lg leading-relaxed text-deep/80 pb-40">
+              <p className="text-lg leading-relaxed text-deep/80 pb-8">
                 {step.copy}
               </p>
+              <button className="group inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em] text-deep/70 transition-colors hover:text-deep">
+                See more
+                <span className="transition-transform group-hover:translate-x-1">
+                  →
+                </span>
+              </button>
+              <div className="pb-40"></div>
               <div className="overflow-hidde border border-[#e1d7c8] lg:hidden">
                 <img
                   src={step.image}
