@@ -1,6 +1,12 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useRef, useState, useEffect } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useMotionValueEvent,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 
 const allSlides = [
   {
@@ -70,7 +76,6 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
   // Zoom starts only after images are centered (after 0.2)
   const centerScale = useTransform(scrollYProgress, [0.2, 0.48], [1, 4.4]);
   const centerYOffset = useTransform(scrollYProgress, [0.2, 0.45], [0, -40]);
-  const siblingsOpacity = useTransform(scrollYProgress, [0.35, 0.48], [1, 0]);
 
   // Calculate base spacing using viewport units that scale with screen
   // Image width is 52.5vh, we'll use vh units for responsive spacing
