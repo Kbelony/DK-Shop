@@ -19,7 +19,7 @@ export function Navbar({ translucent = false }: NavbarProps) {
           translucent ? "bg-transparent" : "bg-sand/95 backdrop-blur"
         )}
       >
-        <div className="mx-auto flex w-full items-center justify-between gap-4 px-4 py-5 sm:px-6 lg:px-10">
+        <div className="mx-auto flex w-full max-w-full items-center justify-between gap-2 sm:gap-4 px-4 py-5 sm:px-6 lg:px-10">
           <div className="space-y-1">
             <p
               className={clsx(
@@ -47,7 +47,7 @@ export function Navbar({ translucent = false }: NavbarProps) {
           <button
             onClick={() => setOpen(true)}
             className={clsx(
-              "flex items-center gap-3 rounded-full border px-5 py-2 font-heading text-base transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
+              "flex items-center gap-2 sm:gap-3 rounded-full border px-3 sm:px-5 py-1.5 sm:py-2 font-heading text-sm sm:text-base transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 flex-shrink-0",
               translucent
                 ? "border-white/40 text-white hover:border-white"
                 : "border-deep/30 text-deep hover:border-deep/60"

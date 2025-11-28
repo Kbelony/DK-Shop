@@ -43,19 +43,20 @@ export function BehindDoughSection() {
             succèdent à droite.
           </p>
         </div>
-        <div className="space-y-28">
+        <div className="space-y-12 sm:space-y-20 lg:space-y-28">
           {steps.map((step, index) => (
             <motion.article
               key={step.title}
               initial={{ opacity: 0, y: 36 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ amount: 0.6, once: false }}
+              viewport={{ amount: 0.2, once: false, margin: "-100px" }}
+              transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
               onViewportEnter={() => setActiveIndex(index)}
-              className="space-y-6"
+              className="space-y-4 sm:space-y-6"
             >
-              <div className="flex items-end gap-4">
+              <div className="flex items-end gap-2 sm:gap-4">
                 <h3
-                  className="font-heading text-[6.5rem] font-extrabold leading-[0.9]"
+                  className="font-heading text-[clamp(3rem,12vw,6.5rem)] font-extrabold leading-[0.9] break-words"
                   style={{
                     fontFamily:
                       '"Inter Display", "Inter Display Placeholder", sans-serif',
@@ -63,7 +64,7 @@ export function BehindDoughSection() {
                 >
                   {step.title}
                 </h3>
-                <span className="text-lg text-deep/50">{step.number}</span>
+                <span className="text-sm sm:text-lg text-deep/50 flex-shrink-0">{step.number}</span>
               </div>
               <p
                 className="font-heading text-base uppercase tracking-[0.5em] text-deep/50"
@@ -73,23 +74,23 @@ export function BehindDoughSection() {
               >
                 {step.label}
               </p>
-              <p className="text-lg leading-relaxed text-deep/80 pb-8">
+              <p className="text-base sm:text-lg leading-relaxed text-deep/80 pb-4 sm:pb-6">
                 {step.copy}
               </p>
-              <button className="group inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em] text-deep/70 transition-colors hover:text-deep">
+              <button className="group inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em] text-deep/70 transition-colors hover:text-deep mb-4 sm:mb-6">
                 See more
                 <span className="transition-transform group-hover:translate-x-1">
                   →
                 </span>
               </button>
-              <div className="pb-40"></div>
-              <div className="overflow-hidde border border-[#e1d7c8] lg:hidden">
+              <div className="overflow-hidden border border-[#e1d7c8] lg:hidden">
                 <img
                   src={step.image}
                   alt={step.title}
-                  className="h-72 w-full object-cover"
+                  className="h-64 sm:h-72 w-full object-cover"
                 />
               </div>
+              <div className="pb-16 sm:pb-24 lg:pb-40"></div>
             </motion.article>
           ))}
         </div>
