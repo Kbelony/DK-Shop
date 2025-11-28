@@ -66,6 +66,10 @@
   * {
     @apply border-border;
   }
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
   body {
     font-family: "Inter Display", "Inter", sans-serif;
     @apply bg-background text-foreground antialiased;

@@ -170,6 +170,50 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
   const prevSlide = () =>
     setActiveSlide((prev) => (prev - 1 + allSlides.length) % allSlides.length);
 
+  // Handle swipe for mobile
+  const minSwipeDistance = 50;
+  const carouselContainerRef = useRef<HTMLDivElement>(null);
+  const touchStartRef = useRef<number | null>(null);
+  const touchEndRef = useRef<number | null>(null);
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    if (!carouselActive) return;
+    touchEndRef.current = null;
+    touchStartRef.current = e.targetTouches[0].clientX;
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (!carouselActive) return;
+    touchEndRef.current = e.targetTouches[0].clientX;
+  };
+
+  const onTouchEnd = () => {
+    if (!carouselActive) {
+      touchStartRef.current = null;
+      touchEndRef.current = null;
+      return;
+    }
+
+    if (!touchStartRef.current || !touchEndRef.current) {
+      touchStartRef.current = null;
+      touchEndRef.current = null;
+      return;
+    }
+
+    const distance = touchStartRef.current - touchEndRef.current;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      nextSlide();
+    } else if (isRightSwipe) {
+      prevSlide();
+    }
+
+    touchStartRef.current = null;
+    touchEndRef.current = null;
+  };
+
   useEffect(() => {
     if (carouselActive) {
       const handleKeyPress = (e: KeyboardEvent) => {
@@ -219,8 +263,12 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
 
         {/* Carousel phase: full screen */}
         <motion.div
+          ref={carouselContainerRef}
           style={{ opacity: carouselOpacity }}
-          className="absolute inset-0"
+          className="absolute inset-0 z-40"
+          onTouchStart={carouselActive ? onTouchStart : undefined}
+          onTouchMove={carouselActive ? onTouchMove : undefined}
+          onTouchEnd={carouselActive ? onTouchEnd : undefined}
         >
           <img
             key={allSlides[activeSlide].src}
