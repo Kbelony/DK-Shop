@@ -7,35 +7,44 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const allSlides = [
   {
+    id: "gallery-1",
     src: "https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=1400&q=80",
     caption: "Ancient grain fields at dawn",
   },
   {
+    id: "gallery-2",
     src: "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?auto=format&fit=crop&w=1400&q=80",
     caption: "Wood-fired ovens glowing late at night",
   },
   {
+    id: "gallery-3",
     src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/024_1U1A1138_DEBORA.jpg?raw=true",
     caption: "The tasting room where stories are shared",
   },
   {
+    id: "gallery-4",
     src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/012_1U1A0932_DEBORA.jpg?raw=true",
     caption: "Hands mixing the finest ingredients",
   },
   {
+    id: "gallery-5",
     src: "https://images.unsplash.com/photo-1481391032119-d89fee407e44?auto=format&fit=crop&w=1400&q=80",
     caption: "Fresh loaves cooling on racks",
   },
 ];
+
+const INITIAL_SLIDE = Math.floor(allSlides.length / 2);
 
 interface OriginHeroSectionProps {
   onOverlayToggle?: (isTransparent: boolean) => void;
 }
 
 export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
+  const navigate = useNavigate();
   const stickyRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef(false);
   const carouselRef = useRef(false);
@@ -46,7 +55,7 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
   });
 
   const [carouselActive, setCarouselActive] = useState(false);
-  const [activeSlide, setActiveSlide] = useState(2); // Start with middle slide (index 2)
+  const [activeSlide, setActiveSlide] = useState(INITIAL_SLIDE); // Start with middle slide
   const [galleryCollapsed, setGalleryCollapsed] = useState(false);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
@@ -58,6 +67,10 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
 
     const shouldShowCarousel = latest > 0.48;
     if (carouselRef.current !== shouldShowCarousel) {
+      // When entering fullscreen carousel, reset to middle slide
+      if (!carouselRef.current && shouldShowCarousel) {
+        setActiveSlide(INITIAL_SLIDE);
+      }
       carouselRef.current = shouldShowCarousel;
       setCarouselActive(shouldShowCarousel);
     }
@@ -74,8 +87,7 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
 
   // Image size adapts to viewport - 70vh height, 0.75 aspect ratio (52.5vh width)
   // Zoom starts only after images are centered (after 0.2)
-  const centerScale = useTransform(scrollYProgress, [0.2, 0.48], [1, 4.4]);
-  const centerYOffset = useTransform(scrollYProgress, [0.2, 0.45], [0, -40]);
+  const centerScale = useTransform(scrollYProgress, [0.2, 0.48], [1, 3.2]);
 
   // Calculate base spacing using viewport units that scale with screen
   // Image width is 52.5vh, we'll use vh units for responsive spacing
@@ -170,6 +182,11 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
   const prevSlide = () =>
     setActiveSlide((prev) => (prev - 1 + allSlides.length) % allSlides.length);
 
+  const handleOpenGallery = () => {
+    const current = allSlides[activeSlide];
+    navigate(`/gallery/${current.id}`);
+  };
+
   useEffect(() => {
     if (carouselActive) {
       const handleKeyPress = (e: KeyboardEvent) => {
@@ -186,6 +203,17 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
       ref={stickyRef}
       className="-mx-4 h-[330vh] sm:-mx-6 lg:-mx-10 relative"
     >
+      <section className="space-y-10 pl-8">
+        <div className="flex flex-col gap-3">
+          <p className="uppercase tracking-[0.3em] text-xs text-muted-foreground">
+            Our artisans
+          </p>
+          <h2 className="font-heading text-4xl">
+            Les mains qui nourrissent la chaleur
+          </h2>
+        </div>
+      </section>
+
       <div className="sticky top-0 h-screen overflow-hidden bg-sand text-white">
         {/* Gallery phase: 5 images horizontal */}
         {!galleryCollapsed && (
@@ -200,7 +228,7 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
                   left: "50%",
                   top: "50%",
                   x: cardOffsetsVh[index],
-                  y: index === 2 ? centerYOffset : 0,
+                  y: 0,
                   scale: cardScales[index],
                   zIndex: index === 2 ? 50 : 20 - Math.abs(index - 2), // Center image always on top
                   borderRadius: 0,
@@ -226,7 +254,18 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
             opacity: carouselOpacity,
             zIndex: 100,
           }}
-          className="absolute inset-0"
+          className="absolute inset-0 cursor-pointer"
+          onClick={(e) => {
+            // Ne pas ouvrir la galerie si on clique sur les boutons de navigation
+            const target = e.target as HTMLElement;
+            if (
+              target.closest("button") ||
+              target.closest('[aria-label*="slide"]')
+            ) {
+              return;
+            }
+            handleOpenGallery();
+          }}
         >
           <img
             key={allSlides[activeSlide].src}
@@ -236,26 +275,29 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/80" />
 
-          {/* Text centered at bottom */}
+          {/* Text centered at bottom - styled like \"Our artisans\" section */}
           <div className="absolute inset-0 flex flex-col items-center justify-end px-6 pb-14 text-center space-y-3">
-            <p className="text-xs uppercase tracking-[0.6em] text-white/70 font-bold">
-              THE ORIGIN
+            <p className="uppercase tracking-[0.3em] text-xs text-white/80">
+              The origin
             </p>
-            <h3
-              className="font-heading text-4xl lg:text-5xl font-extrabold leading-tight pb-10 lg:pb-4"
+            <h2
+              className="font-heading text-3xl sm:text-4xl lg:text-5xl leading-tight pb-10 lg:pb-4"
               style={{
                 fontFamily:
                   '"Inter Display", "Inter Display Placeholder", sans-serif',
               }}
             >
               {allSlides[activeSlide].caption}
-            </h3>
+            </h2>
           </div>
 
           {/* Navigation arrows */}
           <div className="pointer-events-none absolute inset-0 flex items-center justify-between px-6">
             <button
-              onClick={prevSlide}
+              onClick={(e) => {
+                e.stopPropagation();
+                prevSlide();
+              }}
               data-cursor="focus"
               className="pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full border border-white/30 bg-black/30 text-white backdrop-blur transition hover:bg-black/50"
               aria-label="Previous slide"
@@ -263,7 +305,10 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
               <ArrowLeft className="h-5 w-5" />
             </button>
             <button
-              onClick={nextSlide}
+              onClick={(e) => {
+                e.stopPropagation();
+                nextSlide();
+              }}
               data-cursor="focus"
               className="pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full border border-white/30 bg-black/30 text-white backdrop-blur transition hover:bg-black/50"
               aria-label="Next slide"
