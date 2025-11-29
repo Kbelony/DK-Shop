@@ -7,25 +7,31 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const allSlides = [
   {
+    id: "origin",
     src: "https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=1400&q=80",
     caption: "Ancient grain fields at dawn",
   },
   {
+    id: "origin",
     src: "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?auto=format&fit=crop&w=1400&q=80",
     caption: "Wood-fired ovens glowing late at night",
   },
   {
+    id: "origin",
     src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/024_1U1A1138_DEBORA.jpg?raw=true",
     caption: "The tasting room where stories are shared",
   },
   {
+    id: "origin",
     src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/012_1U1A0932_DEBORA.jpg?raw=true",
     caption: "Hands mixing the finest ingredients",
   },
   {
+    id: "origin",
     src: "https://images.unsplash.com/photo-1481391032119-d89fee407e44?auto=format&fit=crop&w=1400&q=80",
     caption: "Fresh loaves cooling on racks",
   },
@@ -38,6 +44,7 @@ interface OriginHeroSectionProps {
 }
 
 export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
+  const navigate = useNavigate();
   const stickyRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef(false);
   const carouselRef = useRef(false);
@@ -175,6 +182,11 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
   const prevSlide = () =>
     setActiveSlide((prev) => (prev - 1 + allSlides.length) % allSlides.length);
 
+  const handleOpenGallery = () => {
+    const current = allSlides[activeSlide];
+    navigate(`/gallery/${current.id}`);
+  };
+
   useEffect(() => {
     if (carouselActive) {
       const handleKeyPress = (e: KeyboardEvent) => {
@@ -242,7 +254,18 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
             opacity: carouselOpacity,
             zIndex: 100,
           }}
-          className="absolute inset-0"
+          className="absolute inset-0 cursor-pointer"
+          onClick={(e) => {
+            // Ne pas ouvrir la galerie si on clique sur les boutons de navigation
+            const target = e.target as HTMLElement;
+            if (
+              target.closest("button") ||
+              target.closest('[aria-label*="slide"]')
+            ) {
+              return;
+            }
+            handleOpenGallery();
+          }}
         >
           <img
             key={allSlides[activeSlide].src}
@@ -271,7 +294,10 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
           {/* Navigation arrows */}
           <div className="pointer-events-none absolute inset-0 flex items-center justify-between px-6">
             <button
-              onClick={prevSlide}
+              onClick={(e) => {
+                e.stopPropagation();
+                prevSlide();
+              }}
               data-cursor="focus"
               className="pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full border border-white/30 bg-black/30 text-white backdrop-blur transition hover:bg-black/50"
               aria-label="Previous slide"
@@ -279,7 +305,10 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
               <ArrowLeft className="h-5 w-5" />
             </button>
             <button
-              onClick={nextSlide}
+              onClick={(e) => {
+                e.stopPropagation();
+                nextSlide();
+              }}
               data-cursor="focus"
               className="pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full border border-white/30 bg-black/30 text-white backdrop-blur transition hover:bg-black/50"
               aria-label="Next slide"

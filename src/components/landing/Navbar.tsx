@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { MenuOverlay } from "./MenuOverlay";
 
@@ -8,6 +9,7 @@ interface NavbarProps {
 
 export function Navbar({ translucent = false }: NavbarProps) {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
   const textColor = translucent ? "text-white" : "text-deep";
   const subText = translucent ? "text-white/70" : "text-deep/60";
 
@@ -20,7 +22,12 @@ export function Navbar({ translucent = false }: NavbarProps) {
         )}
       >
         <div className="mx-auto flex w-full max-w-full items-center justify-between gap-2 sm:gap-4 px-4 py-5 sm:px-6 lg:px-10">
-          <div className="space-y-1">
+          <button
+            onClick={() => navigate("/")}
+            className="space-y-1 text-left cursor-pointer"
+            data-cursor="focus"
+            aria-label="Retour à l'accueil"
+          >
             <p
               className={clsx(
                 "font-heading text-sm uppercase tracking-[0.4em]",
@@ -32,7 +39,7 @@ export function Navbar({ translucent = false }: NavbarProps) {
             <p className={clsx("text-xs uppercase tracking-[0.4em]", subText)}>
               Handmade ovens &amp; crumbs since 1998
             </p>
-          </div>
+          </button>
 
           <div
             className={clsx(

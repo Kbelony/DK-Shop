@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 interface MenuOverlayProps {
@@ -9,6 +10,18 @@ interface MenuOverlayProps {
 const menuEntries = ["Home", "Bakes", "About", "News", "Contact"];
 
 export function MenuOverlay({ open, onClose }: MenuOverlayProps) {
+  const navigate = useNavigate();
+
+  const handleMenuClick = (entry: string) => {
+    if (entry === "Home") {
+      navigate("/");
+      onClose();
+    } else {
+      // Pour les autres entrées, on peut ajouter la logique plus tard
+      onClose();
+    }
+  };
+
   return (
     <AnimatePresence>
       {open && (
@@ -19,7 +32,17 @@ export function MenuOverlay({ open, onClose }: MenuOverlayProps) {
           className="fixed inset-0 z-[90] bg-sand/95 backdrop-blur-sm px-6 sm:px-10 lg:px-20 py-8"
         >
           <div className="flex items-start justify-between text-sm uppercase tracking-wide">
-            <span className="font-heading text-lg text-ember">Bakeat</span>
+            <button
+              onClick={() => {
+                navigate("/");
+                onClose();
+              }}
+              className="font-heading text-lg text-ember cursor-pointer"
+              data-cursor="focus"
+              aria-label="Retour à l'accueil"
+            >
+              Bakeat
+            </button>
             <div className="flex items-center gap-6 text-deep/70">
               <span>London, UK</span>
               <button
@@ -35,17 +58,17 @@ export function MenuOverlay({ open, onClose }: MenuOverlayProps) {
           <div className="mt-16 grid gap-10 lg:grid-cols-[1fr_auto]">
             <div className="space-y-4">
               {menuEntries.map((entry, index) => (
-                <motion.a
+                <motion.button
                   key={entry}
-                  href="#"
-                  className="block text-5xl sm:text-6xl font-heading text-deep leading-tight"
+                  onClick={() => handleMenuClick(entry)}
+                  className="block text-5xl sm:text-6xl font-heading text-deep leading-tight text-left w-full"
                   data-cursor="focus"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.05 * index }}
                 >
                   {entry}
-                </motion.a>
+                </motion.button>
               ))}
             </div>
             <div className="space-y-6 text-right text-sm uppercase tracking-wide text-deep/60">
