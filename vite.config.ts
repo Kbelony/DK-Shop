@@ -22,8 +22,8 @@ export default defineConfig({
             target: process.env.VITE_API_BASE_URL || 'http://localhost:3000',
             changeOrigin: true,
             // Désactiver le proxy si Vercel CLI n'est pas utilisé
-            configure: (proxy, _options) => {
-              proxy.on('error', (err, _req, res) => {
+            configure: (proxy) => {
+              proxy.on('error', (_err, _req, res) => {
                 console.warn('API proxy error. Make sure Vercel CLI is running: vercel dev');
                 if (res && !res.headersSent) {
                   res.writeHead(500, {
