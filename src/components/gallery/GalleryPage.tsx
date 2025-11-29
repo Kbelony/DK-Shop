@@ -9,6 +9,112 @@ type GalleryImage = {
 
 const mockGalleries: Record<string, { title: string; images: GalleryImage[] }> =
   {
+    "gallery-1": {
+      title: "Ancient Grain Fields",
+      images: [
+        {
+          src: "https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=1600&q=80",
+          alt: "Champs de blé anciens",
+        },
+        {
+          src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/024_1U1A1138_DEBORA.jpg?raw=true",
+          alt: "Pain sorti du four",
+        },
+        {
+          src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/012_1U1A0932_DEBORA.jpg?raw=true",
+          alt: "Préparation de la pâte",
+        },
+        {
+          src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/001_1U1A0815_DEBORA.jpg?raw=true",
+          alt: "Atelier Bakeat",
+        },
+      ],
+    },
+    "gallery-2": {
+      title: "Wood-Fired Ovens",
+      images: [
+        {
+          src: "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?auto=format&fit=crop&w=1600&q=80",
+          alt: "Four à bois",
+        },
+        {
+          src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/024_1U1A1138_DEBORA.jpg?raw=true",
+          alt: "Pain sorti du four",
+        },
+        {
+          src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/012_1U1A0932_DEBORA.jpg?raw=true",
+          alt: "Préparation de la pâte",
+        },
+        {
+          src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/001_1U1A0815_DEBORA.jpg?raw=true",
+          alt: "Atelier Bakeat",
+        },
+      ],
+    },
+    "gallery-3": {
+      title: "The Tasting Room",
+      images: [
+        {
+          src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/024_1U1A1138_DEBORA.jpg?raw=true",
+          alt: "Pain sorti du four",
+        },
+        {
+          src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/012_1U1A0932_DEBORA.jpg?raw=true",
+          alt: "Préparation de la pâte",
+        },
+        {
+          src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/001_1U1A0815_DEBORA.jpg?raw=true",
+          alt: "Atelier Bakeat",
+        },
+        {
+          src: "https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=1600&q=80",
+          alt: "Champs de blé anciens",
+        },
+      ],
+    },
+    "gallery-4": {
+      title: "Hands Mixing Ingredients",
+      images: [
+        {
+          src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/012_1U1A0932_DEBORA.jpg?raw=true",
+          alt: "Préparation de la pâte",
+        },
+        {
+          src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/024_1U1A1138_DEBORA.jpg?raw=true",
+          alt: "Pain sorti du four",
+        },
+        {
+          src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/001_1U1A0815_DEBORA.jpg?raw=true",
+          alt: "Atelier Bakeat",
+        },
+        {
+          src: "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?auto=format&fit=crop&w=1600&q=80",
+          alt: "Four à bois",
+        },
+      ],
+    },
+    "gallery-5": {
+      title: "Fresh Loaves Cooling",
+      images: [
+        {
+          src: "https://images.unsplash.com/photo-1481391032119-d89fee407e44?auto=format&fit=crop&w=1600&q=80",
+          alt: "Pains frais sur grille",
+        },
+        {
+          src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/024_1U1A1138_DEBORA.jpg?raw=true",
+          alt: "Pain sorti du four",
+        },
+        {
+          src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/012_1U1A0932_DEBORA.jpg?raw=true",
+          alt: "Préparation de la pâte",
+        },
+        {
+          src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/001_1U1A0815_DEBORA.jpg?raw=true",
+          alt: "Atelier Bakeat",
+        },
+      ],
+    },
+    // Fallback pour compatibilité
     origin: {
       title: "Sourdough Origins",
       images: [
@@ -28,10 +134,6 @@ const mockGalleries: Record<string, { title: string; images: GalleryImage[] }> =
           src: "https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=1600&q=80",
           alt: "Champs de blé anciens",
         },
-        {
-          src: "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?auto=format&fit=crop&w=1600&q=80",
-          alt: "Four à bois",
-        },
       ],
     },
   };
@@ -42,7 +144,8 @@ export function GalleryPage() {
 
   const gallery = useMemo(() => {
     if (id && mockGalleries[id]) return mockGalleries[id];
-    return mockGalleries.origin;
+    // Fallback vers gallery-1 si l'ID n'existe pas
+    return mockGalleries["gallery-1"] || mockGalleries.origin;
   }, [id]);
 
   // Scroll en haut de la page au chargement - plusieurs méthodes pour être sûr
@@ -59,9 +162,13 @@ export function GalleryPage() {
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
-      
+
       // Essayer aussi avec Lenis si disponible (via window)
-      const win = window as Window & { lenis?: { scrollTo: (value: number, options?: { immediate?: boolean }) => void } };
+      const win = window as Window & {
+        lenis?: {
+          scrollTo: (value: number, options?: { immediate?: boolean }) => void;
+        };
+      };
       if (win.lenis && typeof win.lenis.scrollTo === "function") {
         win.lenis.scrollTo(0, { immediate: true });
       }
@@ -86,23 +193,20 @@ export function GalleryPage() {
       <section className="mx-auto max-w-6xl px-4 sm:px-8 pt-24 pb-10 space-y-6">
         <header className="space-y-4">
           <div className="space-y-4">
-          <button
+            <button
               onClick={() => navigate("/")}
               className="group inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em] text-deep/70 transition-colors hover:text-deep"
               data-cursor="focus"
               aria-label="Retour à l'accueil"
             >
               <span className="transition-transform group-hover:translate-x-1">
-              ←
+                ←
               </span>
               Back
-              
             </button>
             <p className="uppercase tracking-[0.3em] text-xs text-muted-foreground">
               Gallery
             </p>
-
-            
           </div>
           <h1
             className="text-[clamp(3.5rem,8vw,8rem)] font-extrabold leading-[0.95] tracking-[-4px] text-deep"

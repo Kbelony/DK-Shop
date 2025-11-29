@@ -11,27 +11,27 @@ import { useNavigate } from "react-router-dom";
 
 const allSlides = [
   {
-    id: "origin",
+    id: "gallery-1",
     src: "https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=1400&q=80",
     caption: "Ancient grain fields at dawn",
   },
   {
-    id: "origin",
+    id: "gallery-2",
     src: "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?auto=format&fit=crop&w=1400&q=80",
     caption: "Wood-fired ovens glowing late at night",
   },
   {
-    id: "origin",
+    id: "gallery-3",
     src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/024_1U1A1138_DEBORA.jpg?raw=true",
     caption: "The tasting room where stories are shared",
   },
   {
-    id: "origin",
+    id: "gallery-4",
     src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/012_1U1A0932_DEBORA.jpg?raw=true",
     caption: "Hands mixing the finest ingredients",
   },
   {
-    id: "origin",
+    id: "gallery-5",
     src: "https://images.unsplash.com/photo-1481391032119-d89fee407e44?auto=format&fit=crop&w=1400&q=80",
     caption: "Fresh loaves cooling on racks",
   },
