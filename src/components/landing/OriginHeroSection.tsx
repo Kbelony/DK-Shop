@@ -27,7 +27,7 @@ const allSlides = [
   },
   {
     id: "gallery-4",
-    src: "https://raw.githubusercontent.com/Kbelony/DK-Shop/e3e17b672e8a2b53cc71d23d409c5fc4d31f6e48/src/assets/scss/Black%20and%20orange%20-2695.JPG",
+    src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/Black%20and%20orange%20-2694.JPG?raw=true",
     caption: "Hands mixing the finest ingredients",
   },
   {
