@@ -40,14 +40,21 @@ function ArtisanCard({ artisan, index }: ArtisanCardProps) {
       className="space-y-4"
     >
       <div
-        className="group relative overflow-hidden rounded-3xl border border-[#e2d5c3] cursor-pointer"
+        className="group relative overflow-hidden rounded-3xl border border-[#e2d5c3] cursor-pointer bg-gray-100"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
+        {/* Background avec blur */}
+        <img
+          src={artisan.img}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-40 scale-110 z-0"
+          aria-hidden="true"
+        />
         <motion.img
           src={artisan.img}
           alt={artisan.name}
-          className="h-80 w-full object-cover"
+          className="relative w-full h-auto object-contain z-10"
           animate={{
             scale: isHovered ? 1.1 : 1,
           }}
@@ -57,7 +64,7 @@ function ArtisanCard({ artisan, index }: ArtisanCardProps) {
           }}
         />
         <motion.div
-          className="absolute inset-0 flex items-center justify-center bg-black/40"
+          className="absolute inset-0 flex items-center justify-center bg-black/40 z-20"
           initial={{ opacity: 0 }}
           animate={{ opacity: isHovered ? 1 : 0 }}
           transition={{ duration: 0.3 }}

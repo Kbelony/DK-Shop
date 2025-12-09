@@ -64,7 +64,9 @@ export function BehindDoughSection() {
                 >
                   {step.title}
                 </h3>
-                <span className="text-sm sm:text-lg text-deep/50 flex-shrink-0">{step.number}</span>
+                <span className="text-sm sm:text-lg text-deep/50 flex-shrink-0">
+                  {step.number}
+                </span>
               </div>
               <p
                 className="font-heading text-base uppercase tracking-[0.5em] text-deep/50"
@@ -87,7 +89,7 @@ export function BehindDoughSection() {
                 <img
                   src={step.image}
                   alt={step.title}
-                  className="h-64 sm:h-72 w-full object-cover"
+                  className="w-full h-auto object-contain"
                 />
               </div>
               <div className="pb-16 sm:pb-24 lg:pb-40"></div>
@@ -97,16 +99,23 @@ export function BehindDoughSection() {
       </div>
 
       <div className="relative hidden lg:block">
-        <div className="sticky top-32 h-[420px] overflow-hidden  border border-[#e1d7c8] shadow-lg">
+        <div className="sticky top-32 overflow-hidden border border-[#e1d7c8] shadow-lg">
           {steps.map((step, index) => (
             <motion.img
               key={step.title}
               src={step.image}
               alt={step.title}
-              className="absolute inset-0 h-full w-full object-cover"
+              className={`w-full h-auto object-contain ${
+                index === activeIndex ? "relative" : "absolute top-0 left-0"
+              }`}
               initial={{ opacity: 0 }}
-              animate={{ opacity: index === activeIndex ? 1 : 0 }}
+              animate={{
+                opacity: index === activeIndex ? 1 : 0,
+              }}
               transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
+              style={{
+                pointerEvents: index === activeIndex ? "auto" : "none",
+              }}
             />
           ))}
         </div>
