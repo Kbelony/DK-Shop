@@ -17,7 +17,7 @@ const allSlides = [
   },
   {
     id: "gallery-2",
-    src: "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?auto=format&fit=crop&w=1400&q=80",
+    src: "https://raw.githubusercontent.com/Kbelony/DK-Shop/69c6d0c13ebebe357c9c64bef98080acc34f3aae/src/assets/scss/What_s%20the%20Art.jpg",
     caption: "Wood-fired ovens glowing late at night",
   },
   {
@@ -27,7 +27,7 @@ const allSlides = [
   },
   {
     id: "gallery-4",
-    src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/012_1U1A0932_DEBORA.jpg?raw=true",
+    src: "https://raw.githubusercontent.com/Kbelony/DK-Shop/e3e17b672e8a2b53cc71d23d409c5fc4d31f6e48/src/assets/scss/Black%20and%20orange%20-2695.JPG",
     caption: "Hands mixing the finest ingredients",
   },
   {

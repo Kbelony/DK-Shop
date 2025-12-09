@@ -7,7 +7,7 @@ import "./assets/scss/style.scss";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+    <App />
     </BrowserRouter>
   </StrictMode>
 );
