@@ -5,7 +5,7 @@ const artisans = [
   {
     name: "Lucie Perrin",
     role: "Cheffe boulangère",
-    img: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/018_1U1A0987_DEBORA_Original.jpg?raw=true",
+    img: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/IMG_7186.jpg?raw=true",
   },
   {
     name: "Elliot Marchand",
@@ -15,6 +15,21 @@ const artisans = [
   {
     name: "Sana Roussel",
     role: "Fermentation & R&D",
+    img: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/_DSC1423.jpg?raw=true",
+  },
+  {
+    name: "Artisan 4",
+    role: "Rôle",
+    img: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/057_1U1A1561_DEBORA.jpg?raw=true",
+  },
+  {
+    name: "Artisan 5",
+    role: "Rôle",
+    img: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/MB_Monica-366.jpeg?raw=true",
+  },
+  {
+    name: "Artisan 6",
+    role: "Rôle",
     img: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/_DSC1423.jpg?raw=true",
   },
 ];
@@ -40,7 +55,7 @@ function ArtisanCard({ artisan, index }: ArtisanCardProps) {
       className="space-y-4"
     >
       <div
-        className="group relative overflow-hidden rounded-3xl border border-[#e2d5c3] cursor-pointer bg-gray-100"
+        className="group relative overflow-hidden rounded-3xl border border-[#e2d5c3] cursor-pointer bg-gray-100 h-80"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -54,12 +69,12 @@ function ArtisanCard({ artisan, index }: ArtisanCardProps) {
         <motion.img
           src={artisan.img}
           alt={artisan.name}
-          className="relative w-full h-auto object-contain z-10"
+          className="relative w-full h-full object-cover z-10"
           animate={{
-            scale: isHovered ? 1.1 : 1,
+            scale: isHovered ? 1.05 : 1,
           }}
           transition={{
-            duration: 0.5,
+            duration: 0.45,
             ease: [0.25, 0.1, 0.25, 1],
           }}
         />
@@ -103,7 +118,7 @@ export function ArtisansSection() {
           Les mains qui nourrissent la chaleur
         </h2>
       </div>
-      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:gap-6 lg:gap-8 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
         {artisans.map((artisan, index) => (
           <ArtisanCard key={artisan.name} artisan={artisan} index={index} />
         ))}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 const steps = [
@@ -30,6 +30,51 @@ const steps = [
 
 export function BehindDoughSection() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const itemRefs = useRef<(HTMLElement | null)[]>([]);
+
+  // Stable synchronisation image/titre : basé sur la proximité du centre de l'écran
+  useEffect(() => {
+    let frame: number | null = null;
+
+    const updateActiveFromScroll = () => {
+      frame = null;
+      const viewportCenter = window.innerHeight / 2;
+      let bestIndex = activeIndex;
+      let bestDistance = Number.POSITIVE_INFINITY;
+
+      itemRefs.current.forEach((el, idx) => {
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const center = rect.top + rect.height / 2;
+        const distance = Math.abs(center - viewportCenter);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestIndex = idx;
+        }
+      });
+
+      if (bestIndex !== activeIndex) {
+        setActiveIndex(bestIndex);
+      }
+    };
+
+    const onScrollOrResize = () => {
+      if (frame === null) {
+        frame = requestAnimationFrame(updateActiveFromScroll);
+      }
+    };
+
+    window.addEventListener("scroll", onScrollOrResize, { passive: true });
+    window.addEventListener("resize", onScrollOrResize);
+    // Première synchro
+    updateActiveFromScroll();
+
+    return () => {
+      if (frame !== null) cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScrollOrResize);
+      window.removeEventListener("resize", onScrollOrResize);
+    };
+  }, [activeIndex]);
 
   return (
     <section className="space-y-12 lg:grid lg:grid-cols-[0.55fr_0.45fr] lg:gap-16">
@@ -47,11 +92,12 @@ export function BehindDoughSection() {
           {steps.map((step, index) => (
             <motion.article
               key={step.title}
+              data-index={index}
+              ref={(el) => (itemRefs.current[index] = el)}
               initial={{ opacity: 0, y: 36 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ amount: 0.2, once: false, margin: "-100px" }}
               transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
-              onViewportEnter={() => setActiveIndex(index)}
               className="space-y-4 sm:space-y-6"
             >
               <div className="flex items-end gap-2 sm:gap-4">
@@ -101,18 +147,15 @@ export function BehindDoughSection() {
       <div className="relative hidden lg:block">
         <div className="sticky top-32 overflow-hidden border border-[#e1d7c8] shadow-lg">
           {steps.map((step, index) => (
-            <motion.img
+            <img
               key={step.title}
               src={step.image}
               alt={step.title}
-              className={`w-full h-auto object-contain ${
-                index === activeIndex ? "relative" : "absolute top-0 left-0"
+              className={`w-full h-auto object-contain transition-opacity duration-0 ${
+                index === activeIndex
+                  ? "relative opacity-100"
+                  : "absolute top-0 left-0 opacity-0"
               }`}
-              initial={{ opacity: 0 }}
-              animate={{
-                opacity: index === activeIndex ? 1 : 0,
-              }}
-              transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
               style={{
                 pointerEvents: index === activeIndex ? "auto" : "none",
               }}
