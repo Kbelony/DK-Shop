@@ -1,50 +1,59 @@
-# React + TypeScript + Vite
+# DK-Shop 🥖
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> An immersive landing page for **Bakeat**, an artisan bakery brand.
 
-Currently, two official plugins are available:
+**Live demo:** [dkshop-omega.vercel.app](https://dkshop-omega.vercel.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## About
 
-## Expanding the ESLint configuration
+DK-Shop is a front-end concept site for a fictional artisan bakery ("Handmade ovens & crumbs since 1998"). The goal: practice high-end, award-site-style front-end techniques — smooth scrolling, custom cursor, scroll-triggered animations and full-screen photo galleries.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Features
 
-- Configure the top-level `parserOptions` property like this:
+- **Immersive landing page** — hero, "Behind the Dough", artisans, full-screen origin story carousel and news sections
+- **Smooth scrolling** — Lenis-powered inertia scrolling
+- **Custom cursor** — a bespoke cursor that reacts to interactive elements
+- **Scroll animations** — Framer Motion transitions throughout
+- **Photo galleries** — full gallery pages with a lightbox viewer (`/gallery/:id`)
+- **Full-screen menu overlay** and responsive layout
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Screenshots
+
+| Home | Origin story |
+| --- | --- |
+| ![Bakeat home](docs/screenshots/home.png) | ![Origin carousel](docs/screenshots/origin.png) |
+
+| Gallery |
+| --- |
+| ![Gallery page](docs/screenshots/gallery.png) |
+
+## Tech Stack
+
+- **React 18 + TypeScript + Vite** (SWC)
+- **React Router** — landing + gallery routes
+- **Tailwind CSS + shadcn/ui (Radix UI)**
+- **Framer Motion** — animations
+- **Lenis** — smooth scrolling
+- **lucide-react** icons
+
+## Getting Started
+
+```bash
+git clone https://github.com/Kbelony/DK-Shop.git
+cd DK-Shop
+npm install
+npm run dev
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+Then open http://localhost:5173.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Project Structure
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```
+src/
+├── components/landing/  # hero, sections, navbar, footer, cursor, smooth scroll
+├── components/gallery/  # gallery page + lightbox
+├── hooks/               # useGallery data hook
+├── services/            # gallery data service
+└── assets/              # photography & styles (SCSS)
 ```
