@@ -84,13 +84,6 @@ export function GalleryPage() {
               Erreur lors du chargement: {error}
             </p>
           )}
-          {!error && (
-            <p className="max-w-2xl text-sm text-muted-foreground">
-              {loading
-                ? "Chargement des images..."
-                : "Galerie chargée depuis Google Photos ou données mockées"}
-            </p>
-          )}
         </header>
       </section>
 
