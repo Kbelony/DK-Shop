@@ -2,6 +2,7 @@
 import { useRef, useState, useEffect } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import {
+  AnimatePresence,
   motion,
   useMotionValueEvent,
   useScroll,
@@ -101,10 +102,17 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
   const textOpacity = useTransform(scrollYProgress, [0.45, 0.6], [0, 1]);
   const controlsOpacity = useTransform(scrollYProgress, [0.75, 0.88], [0, 1]);
 
-  const nextSlide = () =>
+  const [dir, setDir] = useState(1);
+  const shift =
+    (typeof window === "undefined" ? 390 : window.innerWidth) * 0.3 + 16;
+  const nextSlide = () => {
+    setDir(1);
     setActiveSlide((prev) => Math.min(prev + 1, allSlides.length - 1));
-  const prevSlide = () =>
+  };
+  const prevSlide = () => {
+    setDir(-1);
     setActiveSlide((prev) => Math.max(prev - 1, 0));
+  };
 
   const handleOpenGallery = () => {
     const current = allSlides[activeSlide];
@@ -126,7 +134,7 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
     <section
       id="about"
       ref={stickyRef}
-      className="relative -mx-4 -mt-[25vh] h-[400vh] md:h-[500vh] md:-mx-6 md:mt-0 lg:mt-[120px]"
+      className="relative -mx-4 -mt-[28vh] h-[400vh] md:h-[500vh] md:-mx-6 md:mt-0 lg:mt-[120px]"
     >
       <div className="sticky top-0 h-[100vh] overflow-hidden">
         <motion.div
@@ -146,12 +154,26 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
               style={{ scaleX: invX, scaleY: invY, willChange: "transform" }}
               className="absolute inset-0"
             >
-              <img
-                src={allSlides[activeSlide].src}
-                alt={allSlides[activeSlide].caption}
-                draggable={false}
-                className="h-full w-full object-cover"
-              />
+              <AnimatePresence initial={false} custom={dir}>
+                <motion.img
+                  key={allSlides[activeSlide].id}
+                  src={allSlides[activeSlide].src}
+                  alt={allSlides[activeSlide].caption}
+                  draggable={false}
+                  custom={dir}
+                  variants={{
+                    enter: (d: number) => ({ x: `${d * 100}%`, opacity: 1 }),
+                    center: { x: "0%", opacity: 1 },
+                    exit: (d: number) => ({ x: `${d * -30}%`, opacity: 0 }),
+                  }}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  style={{ willChange: "transform" }}
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              </AnimatePresence>
               <motion.div
                 style={{ opacity: dark }}
                 className="absolute inset-0 bg-black"
@@ -160,9 +182,16 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
           </motion.div>
           <motion.div
             style={{ x: leftX, y: "-50%", top: "50%", opacity: sideOpacity, right: `calc(100% - ${insetX} + 1rem)`, willChange: "transform, opacity" }}
-            className="pointer-events-none absolute flex gap-4"
+            className="pointer-events-none absolute flex w-max gap-4"
           >
-            {allSlides.slice(0, activeSlide).map((slide) => (
+            <motion.div
+              key={activeSlide}
+              initial={{ x: dir * shift }}
+              animate={{ x: 0 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="flex gap-4"
+            >
+              {allSlides.slice(0, activeSlide).map((slide) => (
               <img
                 key={slide.id}
                 src={slide.src}
@@ -171,12 +200,20 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
                 className="h-[40vh] w-[30vw] shrink-0 object-cover md:h-[50vh]"
               />
             ))}
+            </motion.div>
           </motion.div>
           <motion.div
             style={{ x: rightX, y: "-50%", top: "50%", opacity: sideOpacity, left: `calc(100% - ${insetX} + 1rem)`, willChange: "transform, opacity" }}
-            className="pointer-events-none absolute flex gap-4"
+            className="pointer-events-none absolute flex w-max gap-4"
           >
-            {allSlides.slice(activeSlide + 1).map((slide) => (
+            <motion.div
+              key={activeSlide}
+              initial={{ x: dir * shift }}
+              animate={{ x: 0 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="flex gap-4"
+            >
+              {allSlides.slice(activeSlide + 1).map((slide) => (
               <img
                 key={slide.id}
                 src={slide.src}
@@ -185,6 +222,7 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
                 className="h-[40vh] w-[30vw] shrink-0 object-cover md:h-[50vh]"
               />
             ))}
+            </motion.div>
           </motion.div>
         </motion.div>
 
