@@ -208,7 +208,6 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
   // the whole screen. Only compositor-friendly properties animate (no layout).
   const sx0 = mobile ? 0.72 : 0.56;
   const sy0 = mobile ? 0.4 : 0.5;
-  const insetX = mobile ? "14vw" : "22vw";
   const scaleX = useTransform(scrollYProgress, [0.02, 0.35], [sx0, 1], { ease });
   const scaleY = useTransform(scrollYProgress, [0.02, 0.35], [sy0, 1], { ease });
   const invX = useTransform(scaleX, (v) => 1 / v);
