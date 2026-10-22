@@ -53,7 +53,7 @@ export function GalleryPage() {
   return (
     <main className="min-h-screen bg-sand text-deep">
       {/* En-tête avec le même padding que la homepage */}
-      <section className="mx-auto w-full px-4 sm:px-6 lg:px-10 pt-24 pb-10 space-y-6">
+      <section className="mx-auto w-full px-4 sm:px-6 lg:px-10 pt-[76px] pb-10 space-y-6">
         <header className="space-y-4">
           <div className="space-y-4">
             <button

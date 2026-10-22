@@ -11,34 +11,64 @@ function useTopOnMount(key: string) {
   }, [key]);
 }
 
-function BackButton({ to, label }: { to: string; label: string }) {
+// Same header as the gallery pages: BACK, small spaced label, big title
+function PageHeader({
+  backTo,
+  title,
+  small = false,
+  children,
+}: {
+  backTo: string;
+  title: string;
+  small?: boolean;
+  children?: React.ReactNode;
+}) {
   const navigate = useNavigate();
   return (
-    <button
-      onClick={() => navigate(to)}
-      className="font-dm group inline-flex items-center gap-2 text-sm font-bold uppercase text-deep/70 transition-colors hover:text-deep"
-      data-cursor="focus"
-    >
-      <span className="transition-transform group-hover:-translate-x-1">←</span>
-      {label}
-    </button>
+    <header className="space-y-4">
+      <div className="space-y-4">
+        <button
+          onClick={() => navigate(backTo)}
+          className="group inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em] text-deep/70 transition-colors hover:text-deep"
+          data-cursor="focus"
+          aria-label="Back"
+        >
+          <span className="transition-transform group-hover:-translate-x-1">←</span>
+          Back
+        </button>
+        <p className="uppercase tracking-[0.3em] text-xs text-muted-foreground">
+          News
+        </p>
+      </div>
+      <h1
+        className={`font-extrabold leading-[0.95] tracking-[-4px] text-deep ${
+          small
+            ? "text-[clamp(2.5rem,6vw,6rem)]"
+            : "text-[clamp(3.5rem,8vw,8rem)]"
+        }`}
+        style={{
+          fontFamily: '"Inter Display", "Inter Display Placeholder", sans-serif',
+        }}
+      >
+        {title}
+      </h1>
+      {children}
+    </header>
   );
 }
 
 export function NewsListPage() {
   useTopOnMount("list");
   return (
-    <main className="mx-auto w-full px-4 pt-[120px] md:px-6">
-      <BackButton to="/" label="Back" />
-      <h1 className="font-display mt-8 text-[56px] leading-[1] lg:text-[128px]">
-        News
-      </h1>
-      <p className="font-dm mt-6 max-w-[560px] text-base leading-[1.2] text-greyText">
-        News, updates and behind-the-scenes stories from the studio and the
-        photo shoots.
-      </p>
+    <main className="mx-auto w-full px-4 pt-[76px] sm:px-6 lg:px-10">
+      <PageHeader backTo="/" title="News">
+        <p className="font-dm max-w-[560px] text-base leading-[1.2] text-greyText">
+          News, updates and behind-the-scenes stories from the studio and the
+          photo shoots.
+        </p>
+      </PageHeader>
 
-      <div className="mt-12 grid gap-12 md:grid-cols-3 md:gap-10 lg:mt-16">
+      <div className="mt-10 grid gap-12 md:grid-cols-3 md:gap-10 lg:mt-12">
         {news.map((item, idx) => (
           <motion.div
             key={item.slug}
@@ -78,13 +108,10 @@ export function NewsArticlePage() {
   const next = news[(index + 1) % news.length];
 
   return (
-    <main className="mx-auto w-full px-4 pt-[120px] md:px-6">
-      <BackButton to="/news" label="All news" />
-      <h1 className="font-display mt-8 max-w-[1100px] text-[40px] leading-[1] lg:text-[96px]">
-        {item.title}
-      </h1>
+    <main className="mx-auto w-full px-4 pt-[76px] sm:px-6 lg:px-10">
+      <PageHeader backTo="/news" title={item.title} small />
 
-      <div className="mt-10 overflow-hidden lg:mt-16">
+      <div className="mt-10 overflow-hidden lg:mt-12">
         <SkeletonImage
           src={item.image}
           alt={item.title}
