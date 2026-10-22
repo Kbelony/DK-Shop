@@ -58,15 +58,19 @@ function SlideImage({
   scaleY: MotionValue<number>;
 }) {
   const dims = useRef({ w: 0, h: 0 });
+  const ref = useRef<HTMLImageElement>(null);
   const [loaded, setLoaded] = useState(false);
   const scale = useTransform([scaleX, scaleY], ([sx, sy]: number[]) => {
-    if (!dims.current.w) return 1;
-    const W = document.documentElement.clientWidth;
-    const H = window.innerHeight;
-    return Math.max((W * sx) / dims.current.w, (H * sy) / dims.current.h);
+    const box = ref.current?.closest<HTMLElement>("[data-origin-sticky]");
+    if (!dims.current.w || !box) return 1;
+    const W = box.offsetWidth;
+    const H = box.offsetHeight;
+    // 1.02: a hair larger than "cover" so rounding never leaves a gap
+    return 1.02 * Math.max((W * sx) / dims.current.w, (H * sy) / dims.current.h);
   });
   return (
     <motion.img
+      ref={ref}
       src={src}
       alt={alt}
       draggable={false}
@@ -132,16 +136,16 @@ function Slide({
   return (
     <motion.div
       style={{ x, opacity, zIndex: offset === 0 ? 2 : 1, willChange: "transform" }}
-      className="absolute inset-0"
+      className="pointer-events-none absolute inset-0"
     >
       <motion.div
         style={{ scaleX, scaleY, willChange: "transform" }}
         onClick={offset === 0 ? onOpen : undefined}
-        className="absolute inset-0 cursor-pointer overflow-hidden"
+        className="img-shimmer pointer-events-auto absolute inset-0 cursor-pointer overflow-hidden"
       >
         <motion.div
           style={{ scaleX: invX, scaleY: invY, willChange: "transform" }}
-          className="img-shimmer absolute inset-0"
+          className="absolute inset-0"
         >
           <SlideImage
             src={slide.src}
@@ -247,7 +251,7 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
       ref={stickyRef}
       className="relative -mx-4 -mt-[22vh] h-[400vh] md:h-[500vh] md:-mx-6 md:mt-0 lg:mt-[120px]"
     >
-      <div className="sticky top-0 h-[100vh] overflow-hidden">
+      <div data-origin-sticky className="sticky top-0 h-[100vh] overflow-hidden">
         <motion.div
           onPanEnd={(_, info) => {
             if (info.offset.x < -40) nextSlide();
