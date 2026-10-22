@@ -53,13 +53,15 @@ export default {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			},
-  			sand: "#f4efe5",
-  			ember: "#c4612b",
-  			deep: "#1e1b16"
+  			sand: "#fcf7eb",
+  			ember: "#b0562b",
+  			deep: "#141415",
+  			greyText: "#4f5154",
+  			greyLabel: "#6a6c71"
   		},
   		fontFamily: {
-  			heading: ['"Inter Display"', '"Inter"', "sans-serif"],
-  			body: ['"Inter Display"', '"Inter"', "sans-serif"]
+  			heading: ['"Inter"', "sans-serif"],
+  			body: ['"DM Sans"', "sans-serif"]
   		}
   	}
   },

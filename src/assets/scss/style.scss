@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:opsz,wght@14..32,100..900&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -71,10 +71,57 @@
     max-width: 100vw;
   }
   body {
-    font-family: "Inter Display", "Inter", sans-serif;
-    @apply bg-background text-foreground antialiased;
+    font-family: "DM Sans", sans-serif;
+    background-color: #fcf7eb;
+    @apply text-foreground antialiased;
     width: 100%;
     position: relative;
     overflow-x: clip;
+  }
+}
+
+/* Inter Display = Inter at its largest optical size (opsz 32), as on the reference site */
+@layer utilities {
+  .font-display {
+    font-family: "Inter", sans-serif;
+    font-variation-settings: "opsz" 32;
+    font-weight: 700;
+  }
+  .font-dm {
+    font-family: "DM Sans", sans-serif;
+  }
+}
+
+/* Lenis (same base rules the reference site ships) */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+@keyframes marquee-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-left 40s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
   }
 }
