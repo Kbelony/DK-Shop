@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ArrowLeft, ArrowRight } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 interface ImageLightboxProps {
   images: Array<{ src: string; alt: string }>;
@@ -19,6 +19,12 @@ export function ImageLightbox({
   onNext,
   onPrevious,
 }: ImageLightboxProps) {
+  const prevIndex = useRef(currentIndex);
+  const dir = currentIndex >= prevIndex.current ? 1 : -1;
+  useEffect(() => {
+    prevIndex.current = currentIndex;
+  }, [currentIndex]);
+
   // Gérer la navigation au clavier
   useEffect(() => {
     if (!isOpen) return;
@@ -68,14 +74,33 @@ export function ImageLightbox({
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="relative z-10 w-[80vw] h-[80vh] flex items-center justify-center"
+          className="relative z-10 flex h-full w-full items-center justify-center overflow-hidden md:h-[90vh] md:w-[90vw]"
+          style={{ touchAction: "pan-y" }}
+          onPanEnd={(_, info) => {
+            if (info.offset.x < -50) onNext();
+            else if (info.offset.x > 50) onPrevious();
+          }}
           onClick={(e) => e.stopPropagation()}
         >
-          <img
-            src={images[currentIndex].src}
-            alt={images[currentIndex].alt}
-            className="max-w-full max-h-full object-contain"
-          />
+          <AnimatePresence initial={false} custom={dir} mode="popLayout">
+            <motion.img
+              key={currentIndex}
+              src={images[currentIndex].src}
+              alt={images[currentIndex].alt}
+              draggable={false}
+              custom={dir}
+              variants={{
+                enter: (d: number) => ({ x: `${d * 40}%`, opacity: 0 }),
+                center: { x: 0, opacity: 1 },
+                exit: (d: number) => ({ x: `${d * -40}%`, opacity: 0 }),
+              }}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="max-h-full max-w-full object-contain"
+            />
+          </AnimatePresence>
 
           {/* Navigation */}
           {images.length > 1 && (
