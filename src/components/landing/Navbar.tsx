@@ -20,7 +20,7 @@ export function Navbar({ translucent = false }: NavbarProps) {
 
   return (
     <>
-      <header className="fixed left-0 right-0 top-0 z-50">
+      <header className={clsx("fixed left-0 right-0 top-0 z-50 md:bg-transparent", !light && "bg-sand")}>
         <div className="flex items-center justify-between px-4 py-4 md:px-6">
           <button
             onClick={goHome}

@@ -71,7 +71,7 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
       onOverlayToggle?.(shouldOverlay);
     }
 
-    const shouldShowCarousel = latest > 0.6;
+    const shouldShowCarousel = latest > 0.75;
     if (carouselRef.current !== shouldShowCarousel) {
       carouselRef.current = shouldShowCarousel;
       setCarouselActive(shouldShowCarousel);
@@ -84,21 +84,22 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
   // the side photos are pushed out and fade, the photo darkens, then the text
   // rises over it. The section is sticky, so scrolling never stops.
   const ease = (t: number) => 1 - Math.pow(1 - t, 3);
-  // The centre photo is always full-screen; a clip-path "window" opens up to
+  // The centre photo is always full-screen; a window opens up to
   // the whole screen. Only compositor-friendly properties animate (no layout).
-  const insetY = mobile ? "30svh" : "25svh";
+  const sx0 = mobile ? 0.72 : 0.56;
+  const sy0 = mobile ? 0.4 : 0.5;
   const insetX = mobile ? "14vw" : "22vw";
-  const clip = useTransform(scrollYProgress, [0.02, 0.35], [
-    `inset(${insetY} ${insetX} ${insetY} ${insetX})`,
-    "inset(0svh 0vw 0svh 0vw)",
-  ], { ease });
+  const scaleX = useTransform(scrollYProgress, [0.02, 0.35], [sx0, 1], { ease });
+  const scaleY = useTransform(scrollYProgress, [0.02, 0.35], [sy0, 1], { ease });
+  const invX = useTransform(scaleX, (v) => 1 / v);
+  const invY = useTransform(scaleY, (v) => 1 / v);
   const leftX = useTransform(scrollYProgress, [0.02, 0.35], ["0vw", "-60vw"], { ease });
   const rightX = useTransform(scrollYProgress, [0.02, 0.35], ["0vw", "60vw"], { ease });
   const sideOpacity = useTransform(scrollYProgress, [0.02, 0.25], [1, 0]);
-  const dark = useTransform(scrollYProgress, [0.3, 0.45], [0, 0.55]);
-  const textY = useTransform(scrollYProgress, [0.36, 0.62], ["100svh", "0svh"]);
-  const textOpacity = useTransform(scrollYProgress, [0.36, 0.5], [0, 1]);
-  const controlsOpacity = useTransform(scrollYProgress, [0.6, 0.7], [0, 1]);
+  const dark = useTransform(scrollYProgress, [0.35, 0.55], [0, 0.55]);
+  const textY = useTransform(scrollYProgress, [0.45, 0.8], ["100vh", "0vh"]);
+  const textOpacity = useTransform(scrollYProgress, [0.45, 0.6], [0, 1]);
+  const controlsOpacity = useTransform(scrollYProgress, [0.75, 0.88], [0, 1]);
 
   const nextSlide = () =>
     setActiveSlide((prev) => Math.min(prev + 1, allSlides.length - 1));
@@ -125,9 +126,9 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
     <section
       id="about"
       ref={stickyRef}
-      className="relative -mx-4 mt-0 h-[300svh] md:h-[420svh] md:-mx-6 lg:mt-[120px]"
+      className="relative -mx-4 -mt-[25vh] h-[400vh] md:h-[500vh] md:-mx-6 md:mt-0 lg:mt-[120px]"
     >
-      <div className="sticky top-0 h-[100svh] overflow-hidden bg-sand">
+      <div className="sticky top-0 h-[100vh] overflow-hidden">
         <motion.div
           onPanEnd={(_, info) => {
             if (info.offset.x < -40) nextSlide();
@@ -137,20 +138,25 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
           className="absolute inset-0"
         >
           <motion.div
-            style={{ clipPath: clip, willChange: "clip-path" }}
+            style={{ scaleX, scaleY, willChange: "transform" }}
             onClick={() => carouselActive && handleOpenGallery()}
-            className="absolute inset-0 cursor-pointer"
+            className="absolute inset-0 cursor-pointer overflow-hidden"
           >
-            <img
-              src={allSlides[activeSlide].src}
-              alt={allSlides[activeSlide].caption}
-              draggable={false}
-              className="h-full w-full object-cover"
-            />
             <motion.div
-              style={{ opacity: dark }}
-              className="absolute inset-0 bg-black"
-            />
+              style={{ scaleX: invX, scaleY: invY, willChange: "transform" }}
+              className="absolute inset-0"
+            >
+              <img
+                src={allSlides[activeSlide].src}
+                alt={allSlides[activeSlide].caption}
+                draggable={false}
+                className="h-full w-full object-cover"
+              />
+              <motion.div
+                style={{ opacity: dark }}
+                className="absolute inset-0 bg-black"
+              />
+            </motion.div>
           </motion.div>
           <motion.div
             style={{ x: leftX, y: "-50%", top: "50%", opacity: sideOpacity, right: `calc(100% - ${insetX} + 1rem)`, willChange: "transform, opacity" }}
@@ -162,7 +168,7 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
                 src={slide.src}
                 alt={slide.caption}
                 draggable={false}
-                className="h-[40svh] w-[30vw] shrink-0 object-cover md:h-[50svh]"
+                className="h-[40vh] w-[30vw] shrink-0 object-cover md:h-[50vh]"
               />
             ))}
           </motion.div>
@@ -176,7 +182,7 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
                 src={slide.src}
                 alt={slide.caption}
                 draggable={false}
-                className="h-[40svh] w-[30vw] shrink-0 object-cover md:h-[50svh]"
+                className="h-[40vh] w-[30vw] shrink-0 object-cover md:h-[50vh]"
               />
             ))}
           </motion.div>
