@@ -263,7 +263,7 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
     <section
       id="origin"
       ref={stickyRef}
-      className="relative -mx-4 -mt-[22vh] h-[400vh] md:h-[500vh] md:-mx-6 md:mt-0 lg:mt-[120px]"
+      className="relative -mx-4 -mt-[22vh] h-[400vh] md:h-[500vh] md:-mx-6 md:mt-0 lg:-mt-[20vh]"
     >
       <div data-origin-sticky className="sticky top-0 h-[100vh] overflow-hidden">
         <motion.div

@@ -1,6 +1,6 @@
 export function CreatorIntroSection() {
   return (
-    <section id="about" className="relative scroll-mt-20 mt-10 pb-10 lg:mt-24 lg:grid lg:grid-cols-[233px_351px_1fr] lg:pb-24">
+    <section id="about" className="relative scroll-mt-20 mt-10 pb-10 lg:mt-24 lg:grid lg:grid-cols-[233px_351px_1fr] lg:pb-8">
       <p className="font-dm mb-6 text-xs uppercase text-greyLabel lg:mb-0">
         The maker
       </p>
