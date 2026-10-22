@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
 
 const steps = [
   {
@@ -77,90 +76,59 @@ export function BehindDoughSection() {
   }, [activeIndex]);
 
   return (
-    <section className="space-y-12 lg:grid lg:grid-cols-[0.55fr_0.45fr] lg:gap-16">
-      <div className="space-y-12 pl-2 sm:pl-4 lg:pl-8">
-        <div className="space-y-3 pb-12">
-          <p className="text-xs uppercase tracking-[0.5em] text-deep/50">
+    <section
+      id="bakes"
+      className="relative mt-[120px] lg:mt-[309px]"
+    >
+      <div className="mt-0 lg:grid lg:grid-cols-[233px_351px_1fr]">
+        <div className="mb-6 lg:mb-0">
+          <p className="font-dm text-xs uppercase text-greyLabel lg:sticky lg:top-[84px]">
             Behind the dough
           </p>
-          <p className="max-w-md text-base text-deep/70">
-            Make, Bake, Eat — un triptyque qui reste pendant que les images se
-            succèdent à droite.
-          </p>
         </div>
-        <div className="space-y-12 sm:space-y-20 lg:space-y-28">
+        <div>
           {steps.map((step, index) => (
-            <motion.article
+            <article
               key={step.title}
-              data-index={index}
               ref={(el) => (itemRefs.current[index] = el)}
-              initial={{ opacity: 0, y: 36 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ amount: 0.2, once: false, margin: "-100px" }}
-              transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
-              className="space-y-4 sm:space-y-6"
+              className="pb-[100px] lg:pb-[316px]"
             >
-              <div className="flex items-end gap-2 sm:gap-4">
-                <h3
-                  className="font-heading text-[clamp(3rem,12vw,6.5rem)] font-extrabold leading-[0.9] break-words"
-                  style={{
-                    fontFamily:
-                      '"Inter Display", "Inter Display Placeholder", sans-serif',
-                  }}
-                >
-                  {step.title}
-                </h3>
-                <span className="text-sm sm:text-lg text-deep/50 flex-shrink-0">
+              <h3 className="font-display relative inline-block text-[56px] leading-[1] lg:text-[128px]">
+                {step.title}
+                <sup className="absolute left-full top-0 ml-px text-xl leading-6">
                   {step.number}
-                </span>
-              </div>
-              <p
-                className="font-heading text-base uppercase tracking-[0.5em] text-deep/50"
-                style={{
-                  fontFamily: '"DM Sans","DM Sans Placeholder",sans-serif',
-                }}
-              >
+                </sup>
+              </h3>
+              <p className="font-dm mt-10 text-2xl font-bold leading-[1.2] text-deep lg:mt-20">
                 {step.label}
               </p>
-              <p className="text-base sm:text-lg leading-relaxed text-deep/80 pb-4 sm:pb-6">
+              <p className="font-dm mt-3 text-base leading-[1.2] text-greyText">
                 {step.copy}
               </p>
-              <button className="group inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em] text-deep/70 transition-colors hover:text-deep mb-4 sm:mb-6">
-                See more
-                <span className="transition-transform group-hover:translate-x-1">
-                  →
-                </span>
-              </button>
-              <div className="overflow-hidden border border-[#e1d7c8] lg:hidden">
+              <div className="mt-10 overflow-hidden lg:hidden">
                 <img
                   src={step.image}
                   alt={step.title}
-                  className="w-full h-auto object-contain"
+                  className="h-[218px] w-full object-cover sm:h-[360px]"
                 />
               </div>
-              <div className="pb-16 sm:pb-24 lg:pb-40"></div>
-            </motion.article>
+            </article>
           ))}
         </div>
-      </div>
 
-      <div className="relative hidden lg:block">
-        <div className="sticky top-32 overflow-hidden border border-[#e1d7c8] shadow-lg">
-          {steps.map((step, index) => (
-            <img
-              key={step.title}
-              src={step.image}
-              alt={step.title}
-              className={`w-full h-auto object-contain transition-opacity duration-0 ${
-                index === activeIndex
-                  ? "relative opacity-100"
-                  : "absolute top-0 left-0 opacity-0"
-              }`}
-              style={{
-                pointerEvents: index === activeIndex ? "auto" : "none",
-              }}
-            />
-          ))}
+        <div className="relative hidden pl-[112px] lg:block">
+          <div className="sticky top-[104px] aspect-[696/422] w-full overflow-hidden">
+            {steps.map((step, index) => (
+              <img
+                key={step.title}
+                src={step.image}
+                alt={step.title}
+                className={`absolute inset-0 h-full w-full object-cover object-[50%_30%] transition-opacity duration-300 ${
+                  index === activeIndex ? "opacity-100" : "opacity-0"
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
