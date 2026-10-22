@@ -46,7 +46,7 @@ export function MenuOverlay({ open, onClose }: MenuOverlayProps) {
               data-cursor="focus"
               aria-label="Back to home"
             >
-              DK-Shop
+              Deborah Kabongo
             </button>
             <div className="font-dm flex items-center gap-10 text-base font-bold text-deep">
               <span className="hidden sm:inline">Handmade clothing</span>

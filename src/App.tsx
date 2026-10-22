@@ -5,6 +5,7 @@ import { AppLayout } from "./components/landing/AppLayout";
 import { Navbar } from "./components/landing/Navbar";
 import { HeroIntroSection } from "./components/landing/HeroIntroSection";
 import { BehindDoughSection } from "./components/landing/BehindDoughSection";
+import { CreatorIntroSection } from "./components/landing/CreatorIntroSection";
 import { OriginHeroSection } from "./components/landing/OriginHeroSection";
 import { NewsSection } from "./components/landing/NewsSection";
 import { Footer } from "./components/landing/Footer";
@@ -21,6 +22,7 @@ function LandingPage({
     <AppLayout>
       <HeroIntroSection />
       <BehindDoughSection />
+      <CreatorIntroSection />
       <OriginHeroSection onOverlayToggle={onOverlayToggle} />
       <NewsSection />
       <Footer />

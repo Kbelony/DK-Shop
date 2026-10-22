@@ -29,9 +29,9 @@ export function Navbar({ translucent = false }: NavbarProps) {
               light ? "text-white" : "text-ember"
             )}
             data-cursor="focus"
-            aria-label="Back to home"
+            aria-label="Deborah Kabongo, back to home"
           >
-            DK-Shop
+            Deborah Kabongo
           </button>
 
           <div

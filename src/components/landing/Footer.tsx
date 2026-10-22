@@ -54,7 +54,7 @@ export function Footer() {
           <a href="#">Newsletter</a>
         </div>
         <span className="hidden lg:block" />
-        <span>© {new Date().getFullYear()} DK-Shop</span>
+        <span>© {new Date().getFullYear()} Deborah Kabongo</span>
         <button
           onClick={() => scrollToId("top")}
           className="justify-self-end uppercase"
