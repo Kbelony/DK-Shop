@@ -74,7 +74,7 @@ export function ImageLightbox({
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="relative z-10 flex h-full w-full items-center justify-center overflow-hidden md:h-[90vh] md:w-[90vw]"
+          className="relative z-10 flex h-full w-full items-center justify-center overflow-hidden px-4 pb-16 pt-20 md:h-[90vh] md:w-[90vw] md:p-0"
           style={{ touchAction: "pan-y" }}
           onPanEnd={(_, info) => {
             if (info.offset.x < -50) onNext();
