@@ -191,9 +191,6 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
     offset: ["start start", "end end"],
   });
 
-  // A short pause: the carousel sits centred on screen before it starts to grow
-  const prog = useTransform(scrollYProgress, [0.07, 1], [0, 1]);
-
   const [carouselActive, setCarouselActive] = useState(false);
   const [activeSlide, setActiveSlide] = useState(INITIAL_SLIDE); // Start with middle slide
   const [mobile, setMobile] = useState(false);
@@ -229,15 +226,15 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
   // the whole screen. Only compositor-friendly properties animate (no layout).
   const sx0 = mobile ? 0.72 : 0.56;
   const sy0 = mobile ? 0.4 : 0.5;
-  const scaleX = useTransform(prog, [0.02, 0.35], [sx0, 1], { ease });
-  const scaleY = useTransform(prog, [0.02, 0.35], [sy0, 1], { ease });
+  const scaleX = useTransform(scrollYProgress, [0.02, 0.35], [sx0, 1], { ease });
+  const scaleY = useTransform(scrollYProgress, [0.02, 0.35], [sy0, 1], { ease });
   const invX = useTransform(scaleX, (v) => 1 / v);
   const invY = useTransform(scaleY, (v) => 1 / v);
-  const sideOpacity = useTransform(prog, [0.02, 0.25], [1, 0]);
-  const dark = useTransform(prog, [0.35, 0.55], [0, 0.55]);
-  const textY = useTransform(prog, [0.45, 0.8], ["100vh", "0vh"]);
-  const textOpacity = useTransform(prog, [0.45, 0.6], [0, 1]);
-  const controlsOpacity = useTransform(prog, [0.75, 0.88], [0, 1]);
+  const sideOpacity = useTransform(scrollYProgress, [0.02, 0.25], [1, 0]);
+  const dark = useTransform(scrollYProgress, [0.35, 0.55], [0, 0.55]);
+  const textY = useTransform(scrollYProgress, [0.45, 0.8], ["100vh", "0vh"]);
+  const textOpacity = useTransform(scrollYProgress, [0.45, 0.6], [0, 1]);
+  const controlsOpacity = useTransform(scrollYProgress, [0.75, 0.88], [0, 1]);
 
   const nextSlide = () => {
     setActiveSlide((prev) => Math.min(prev + 1, allSlides.length - 1));
