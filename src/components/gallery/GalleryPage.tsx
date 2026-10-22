@@ -59,7 +59,7 @@ export function GalleryPage() {
               onClick={() => navigate("/")}
               className="group inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em] text-deep/70 transition-colors hover:text-deep"
               data-cursor="focus"
-              aria-label="Retour à l'accueil"
+              aria-label="Back to home"
             >
               <span className="transition-transform group-hover:translate-x-1">
                 ←
@@ -81,7 +81,7 @@ export function GalleryPage() {
           </h1>
           {error && (
             <p className="max-w-2xl text-sm text-red-600">
-              Erreur lors du chargement: {error}
+              Error while loading: {error}
             </p>
           )}
         </header>
@@ -166,7 +166,7 @@ export function GalleryPage() {
       {!loading && !gallery && (
         <section className="mx-auto w-full px-4 sm:px-6 lg:px-10 pb-24">
           <div className="flex items-center justify-center h-96">
-            <p className="text-muted-foreground">Aucune galerie trouvée</p>
+            <p className="text-muted-foreground">No gallery found</p>
           </div>
         </section>
       )}

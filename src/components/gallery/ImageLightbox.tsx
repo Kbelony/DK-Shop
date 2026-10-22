@@ -56,7 +56,7 @@ export function ImageLightbox({
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20"
-          aria-label="Fermer"
+          aria-label="Close"
           data-cursor="focus"
         >
           <X className="h-6 w-6" />
@@ -86,7 +86,7 @@ export function ImageLightbox({
                   onPrevious();
                 }}
                 className="absolute left-4 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20"
-                aria-label="Image précédente"
+                aria-label="Previous image"
                 data-cursor="focus"
               >
                 <ArrowLeft className="h-6 w-6" />
@@ -97,7 +97,7 @@ export function ImageLightbox({
                   onNext();
                 }}
                 className="absolute right-4 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20"
-                aria-label="Image suivante"
+                aria-label="Next image"
                 data-cursor="focus"
               >
                 <ArrowRight className="h-6 w-6" />

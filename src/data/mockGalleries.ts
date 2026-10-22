@@ -3,29 +3,29 @@ import type { Gallery } from "@/services/googlePhotos";
 export const mockGalleries: Record<string, Gallery> = {
   "gallery-1": {
     id: "gallery-1",
-    title: "Ancient Grain Fields",
+    title: "Photo Shoot 1",
     images: [
       {
         src: "https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=1600&q=80",
-        alt: "Champs de blé anciens",
+        alt: "Model in a handmade piece",
       },
       {
         src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/024_1U1A1138_DEBORA.jpg?raw=true",
-        alt: "Pain sorti du four",
+        alt: "Photo shoot detail",
       },
       {
         src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/012_1U1A0932_DEBORA.jpg?raw=true",
-        alt: "Préparation de la pâte",
+        alt: "Fitting the garment",
       },
       {
         src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/001_1U1A0815_DEBORA.jpg?raw=true",
-        alt: "Atelier Bakeat",
+        alt: "Studio",
       },
     ],
   },
   "gallery-2": {
     id: "gallery-2",
-    title: "Wood-Fired Ovens",
+    title: "Photo Shoot 2",
     images: [
       {
         src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/IMG_1271.PNG?raw=true",
@@ -43,7 +43,7 @@ export const mockGalleries: Record<string, Gallery> = {
   },
   "gallery-3": {
     id: "gallery-3",
-    title: "The Tasting Room",
+    title: "Photo Shoot 3",
     images: [
       {
         src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/014_1U1A0953_DEBORA.jpg?raw=true",
@@ -89,7 +89,7 @@ export const mockGalleries: Record<string, Gallery> = {
   },
   "gallery-4": {
     id: "gallery-4",
-    title: "Hands Mixing Ingredients",
+    title: "Photo Shoot 4",
     images: [
       {
         src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/030_1U1A1224_DEBORA.jpg?raw=true",
@@ -147,46 +147,46 @@ export const mockGalleries: Record<string, Gallery> = {
   },
   "gallery-5": {
     id: "gallery-5",
-    title: "Fresh Loaves Cooling",
+    title: "Photo Shoot 5",
     images: [
       {
         src: "https://images.unsplash.com/photo-1481391032119-d89fee407e44?auto=format&fit=crop&w=1600&q=80",
-        alt: "Pains frais sur grille",
+        alt: "Model in a handmade piece",
       },
       {
         src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/024_1U1A1138_DEBORA.jpg?raw=true",
-        alt: "Pain sorti du four",
+        alt: "Photo shoot detail",
       },
       {
         src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/012_1U1A0932_DEBORA.jpg?raw=true",
-        alt: "Préparation de la pâte",
+        alt: "Fitting the garment",
       },
       {
         src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/001_1U1A0815_DEBORA.jpg?raw=true",
-        alt: "Atelier Bakeat",
+        alt: "Studio",
       },
     ],
   },
   // Fallback pour compatibilité
   origin: {
     id: "origin",
-    title: "Sourdough Origins",
+    title: "Photo Shoot 6",
     images: [
       {
         src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/024_1U1A1138_DEBORA.jpg?raw=true",
-        alt: "Pain sorti du four",
+        alt: "Photo shoot detail",
       },
       {
         src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/012_1U1A0932_DEBORA.jpg?raw=true",
-        alt: "Préparation de la pâte",
+        alt: "Fitting the garment",
       },
       {
         src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/001_1U1A0815_DEBORA.jpg?raw=true",
-        alt: "Atelier Bakeat",
+        alt: "Studio",
       },
       {
         src: "https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=1600&q=80",
-        alt: "Champs de blé anciens",
+        alt: "Model in a handmade piece",
       },
     ],
   },
