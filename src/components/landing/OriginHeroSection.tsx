@@ -208,7 +208,7 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
           <p className="uppercase tracking-[0.3em] text-xs text-muted-foreground">
             Our artisans
           </p>
-          <h2 className="font-heading text-4xl">
+          <h2 className="font-display text-4xl lg:text-[64px] leading-none">
             Les mains qui nourrissent la chaleur
           </h2>
         </div>
@@ -281,7 +281,7 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
               The origin
             </p>
             <h2
-              className="font-heading text-3xl sm:text-4xl lg:text-5xl leading-tight pb-10 lg:pb-4"
+              className="font-display text-3xl sm:text-4xl lg:text-5xl leading-[1.05] pb-10 lg:pb-4"
               style={{
                 fontFamily:
                   '"Inter Display", "Inter Display Placeholder", sans-serif',
