@@ -13,27 +13,27 @@ const allSlides = [
   {
     id: "gallery-1",
     src: "https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=1400&q=80",
-    caption: "Ancient grain fields at dawn",
+    caption: "Photo shoot, look 1",
   },
   {
     id: "gallery-2",
     src: "https://raw.githubusercontent.com/Kbelony/DK-Shop/69c6d0c13ebebe357c9c64bef98080acc34f3aae/src/assets/scss/What_s%20the%20Art.jpg",
-    caption: "Wood-fired ovens glowing late at night",
+    caption: "Photo shoot, look 2",
   },
   {
     id: "gallery-3",
     src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/024_1U1A1138_DEBORA.jpg?raw=true",
-    caption: "The tasting room where stories are shared",
+    caption: "Photo shoot, look 3",
   },
   {
     id: "gallery-4",
     src: "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/Black%20and%20orange%20-2694.JPG?raw=true",
-    caption: "Hands mixing the finest ingredients",
+    caption: "Photo shoot, look 4",
   },
   {
     id: "gallery-5",
     src: "https://images.unsplash.com/photo-1481391032119-d89fee407e44?auto=format&fit=crop&w=1400&q=80",
-    caption: "Fresh loaves cooling on racks",
+    caption: "Photo shoot, look 5",
   },
 ];
 
@@ -48,24 +48,30 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
   const stickyRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef(false);
   const carouselRef = useRef(false);
-  const galleryCollapseRef = useRef(false);
   const { scrollYProgress } = useScroll({
     target: stickyRef,
-    offset: ["start end", "end start"],
+    offset: ["start start", "end end"],
   });
 
   const [carouselActive, setCarouselActive] = useState(false);
   const [activeSlide, setActiveSlide] = useState(INITIAL_SLIDE); // Start with middle slide
-  const [galleryCollapsed, setGalleryCollapsed] = useState(false);
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const update = () => setMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const shouldOverlay = latest > 0.25 && latest < 0.98;
+    const shouldOverlay = latest > 0.35 && latest < 0.98;
     if (overlayRef.current !== shouldOverlay) {
       overlayRef.current = shouldOverlay;
       onOverlayToggle?.(shouldOverlay);
     }
 
-    const shouldShowCarousel = latest > 0.48;
+    const shouldShowCarousel = latest > 0.8;
     if (carouselRef.current !== shouldShowCarousel) {
       // When entering fullscreen carousel, reset to middle slide
       if (!carouselRef.current && shouldShowCarousel) {
@@ -75,107 +81,30 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
       setCarouselActive(shouldShowCarousel);
     }
 
-    const shouldCollapseGallery = latest > 0.52;
-    if (galleryCollapseRef.current !== shouldCollapseGallery) {
-      galleryCollapseRef.current = shouldCollapseGallery;
-      setGalleryCollapsed(shouldCollapseGallery);
-    }
   });
 
-  // Phase 1 (0 to 0.2): Center all 5 images on screen
-  // Phase 2 (0.2 to 0.48): Create gap ONLY around center image and start zoom
-
-  // Image size adapts to viewport - 70vh height, 0.75 aspect ratio (52.5vh width)
-  // Zoom starts only after images are centered (after 0.2)
-  const centerScale = useTransform(scrollYProgress, [0.2, 0.48], [1, 3.2]);
-
-  // Calculate base spacing using viewport units that scale with screen
-  // Image width is 52.5vh, we'll use vh units for responsive spacing
-  // Base spacing = image width (52.5vh) + small gap (2vh) = 54.5vh
-  const baseSpacingVh = 54.5; // Base spacing in vh units (responsive to screen height)
-  const gapExpansionVh = 20; // Additional gap expansion in vh units
-
-  const cardOffsets = allSlides.map((_, index) => {
-    const relative = index - 2;
-
-    // Center image (index 2) - ALWAYS at 0, truly centered
-    if (relative === 0) {
-      return useTransform(scrollYProgress, [0, 0.48], [0, 0]);
-    }
-
-    // Phase 1 (0 to 0.2): Images are already centered, stay in position
-    // Phase 2 (0.2 to 0.48): Gap expands ONLY between center and its neighbors
-
-    // Left neighbor (index 1) - positioned to the left of center
-    if (relative === -1) {
-      return useTransform(
-        scrollYProgress,
-        [0, 0.2, 0.48], // Already at position, then expand gap
-        [-baseSpacingVh, -baseSpacingVh, -baseSpacingVh - gapExpansionVh]
-      );
-    }
-
-    // Right neighbor (index 3) - positioned to the right of center
-    if (relative === 1) {
-      return useTransform(
-        scrollYProgress,
-        [0, 0.2, 0.48], // Already at position, then expand gap
-        [baseSpacingVh, baseSpacingVh, baseSpacingVh + gapExpansionVh]
-      );
-    }
-
-    // Far left (index 0) - positioned to the left of index 1
-    // Moves with index 1 but maintains constant gap (NO expansion between 0 and 1)
-    if (relative === -2) {
-      return useTransform(
-        scrollYProgress,
-        [0, 0.2, 0.48], // Already at position, then move with neighbor
-        [
-          -baseSpacingVh * 2,
-          -baseSpacingVh * 2,
-          -baseSpacingVh * 2 - gapExpansionVh,
-        ]
-      );
-    }
-
-    // Far right (index 4) - positioned to the right of index 3
-    // Moves with index 3 but maintains constant gap (NO expansion between 3 and 4)
-    if (relative === 2) {
-      return useTransform(
-        scrollYProgress,
-        [0, 0.2, 0.48], // Already at position, then move with neighbor
-        [
-          baseSpacingVh * 2,
-          baseSpacingVh * 2,
-          baseSpacingVh * 2 + gapExpansionVh,
-        ]
-      );
-    }
-
-    return useTransform(scrollYProgress, [0, 0.48], [0, 0]);
-  });
-
-  // All images are visible from the start, only fade out later
-  const imageOpacity = allSlides.map((_, index) => {
-    if (index === 2) return useTransform(scrollYProgress, [0, 0.48], [1, 1]);
-    return useTransform(scrollYProgress, [0, 0.35, 0.48], [1, 1, 0]);
-  });
-
-  // Only the center image (index 2) zooms, others stay same size or shrink slightly
-  // Zoom starts only after images are centered (after 0.2)
-  const cardScales = allSlides.map((_, index) =>
-    index === 2
-      ? centerScale
-      : useTransform(scrollYProgress, [0.2, 0.48], [1, 0.75])
+  // Same motion as the reference's "The origin": the row of photos sits in the
+  // middle, the centre photo grows (width + height) until it fills the screen,
+  // the side photos are pushed out and fade, the photo darkens, then the text
+  // rises over it. The section is sticky, so scrolling never stops.
+  const ease = (t: number) => 1 - Math.pow(1 - t, 3);
+  const centerW = useTransform(
+    scrollYProgress,
+    [0.1, 0.4],
+    [mobile ? "72vw" : "56vw", "100vw"],
+    { ease }
   );
-
-  // Convert offsets to vh units for responsive x transform
-  const cardOffsetsVh = cardOffsets.map((offset) =>
-    useTransform(offset, (val) => `${val}vh`)
+  const centerH = useTransform(
+    scrollYProgress,
+    [0.1, 0.4],
+    [mobile ? "40vh" : "50vh", "100vh"],
+    { ease }
   );
-
-  // Carousel phase: full screen - appears when gallery fades out
-  const carouselOpacity = useTransform(scrollYProgress, [0.48, 0.55], [0, 1]);
+  const sideOpacity = useTransform(scrollYProgress, [0.1, 0.3], [1, 0]);
+  const dark = useTransform(scrollYProgress, [0.4, 0.6], [0, 0.55]);
+  const textY = useTransform(scrollYProgress, [0.55, 0.85], ["100vh", "0vh"]);
+  const textOpacity = useTransform(scrollYProgress, [0.55, 0.72], [0, 1]);
+  const controlsOpacity = useTransform(scrollYProgress, [0.8, 0.9], [0, 1]);
 
   const nextSlide = () =>
     setActiveSlide((prev) => (prev + 1) % allSlides.length);
@@ -200,140 +129,88 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
 
   return (
     <section
+      id="about"
       ref={stickyRef}
-      className="-mx-4 h-[330vh] sm:-mx-6 lg:-mx-10 relative"
+      className="relative -mx-4 mt-[100px] h-[500vh] md:-mx-6 lg:mt-[200px]"
     >
-      <section className="space-y-10 pl-8">
-        <div className="flex flex-col gap-3">
-          <p className="uppercase tracking-[0.3em] text-xs text-muted-foreground">
-            Our artisans
-          </p>
-          <h2 className="font-display text-4xl lg:text-[64px] leading-none">
-            Les mains qui nourrissent la chaleur
-          </h2>
-        </div>
-      </section>
-
-      <div className="sticky top-0 h-screen overflow-hidden bg-sand text-white">
-        {/* Gallery phase: 5 images horizontal */}
-        {!galleryCollapsed && (
-          <div className="absolute inset-0 flex items-center justify-center z-10">
-            {allSlides.map((slide, index) => (
+      <div className="sticky top-0 h-screen overflow-hidden bg-sand">
+        <div className="flex h-full w-full items-center justify-center gap-4">
+          {allSlides.map((slide, i) =>
+            i === 2 ? (
               <motion.div
-                key={slide.src}
-                className="absolute overflow-hidden rounded-none shadow-xl"
-                style={{
-                  width: "52.5vh", // 70vh * 0.75 aspect ratio
-                  height: "70vh", // Takes 70% of viewport height
-                  left: "50%",
-                  top: "50%",
-                  x: cardOffsetsVh[index],
-                  y: 0,
-                  scale: cardScales[index],
-                  zIndex: index === 2 ? 50 : 20 - Math.abs(index - 2), // Center image always on top
-                  borderRadius: 0,
-                  opacity: imageOpacity[index],
-                  marginLeft: "-26.25vh", // Center horizontally: -50% of width (52.5vh / 2)
-                  marginTop: "-35vh", // Center vertically: -50% of height (70vh / 2)
-                  transformOrigin: "center center", // Ensure scaling happens from center
-                }}
+                key={slide.id}
+                style={{ width: centerW, height: centerH }}
+                className="relative shrink-0 cursor-pointer overflow-hidden"
+                onClick={() => carouselActive && handleOpenGallery()}
               >
                 <img
-                  src={slide.src}
+                  key={carouselActive ? allSlides[activeSlide].src : slide.src}
+                  src={carouselActive ? allSlides[activeSlide].src : slide.src}
                   alt={slide.caption}
                   className="h-full w-full object-cover"
                 />
+                <motion.div
+                  style={{ opacity: dark }}
+                  className="absolute inset-0 bg-black"
+                />
               </motion.div>
-            ))}
-          </div>
-        )}
+            ) : (
+              <motion.img
+                key={slide.id}
+                src={slide.src}
+                alt={slide.caption}
+                style={{ opacity: sideOpacity }}
+                className="h-[40vh] w-[30vw] shrink-0 object-cover md:h-[50vh]"
+              />
+            )
+          )}
+        </div>
 
-        {/* Carousel phase: full screen */}
         <motion.div
-          style={{
-            opacity: carouselOpacity,
-            zIndex: 100,
-          }}
-          className="absolute inset-0 cursor-pointer"
-          onClick={(e) => {
-            // Ne pas ouvrir la galerie si on clique sur les boutons de navigation
-            const target = e.target as HTMLElement;
-            if (
-              target.closest("button") ||
-              target.closest('[aria-label*="slide"]')
-            ) {
-              return;
-            }
-            handleOpenGallery();
-          }}
+          style={{ y: textY, opacity: textOpacity }}
+          className="pointer-events-none absolute inset-0 flex items-center px-4 text-sand md:px-6 lg:pl-[744px]"
         >
-          <img
-            key={allSlides[activeSlide].src}
-            src={allSlides[activeSlide].src}
-            alt={allSlides[activeSlide].caption}
-            className="h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/80" />
-
-          {/* Text centered at bottom - styled like \"Our artisans\" section */}
-          <div className="absolute inset-0 flex flex-col items-center justify-end px-6 pb-14 text-center space-y-3">
-            <p className="uppercase tracking-[0.3em] text-xs text-white/80">
+          <div className="max-w-[672px]">
+            <h2 className="font-display text-[56px] leading-[1] lg:text-[128px]">
               The origin
-            </p>
-            <h2
-              className="font-display text-3xl sm:text-4xl lg:text-5xl leading-[1.05] pb-10 lg:pb-4"
-              style={{
-                fontFamily:
-                  '"Inter Display", "Inter Display Placeholder", sans-serif',
-              }}
-            >
-              {allSlides[activeSlide].caption}
             </h2>
-          </div>
-
-          {/* Navigation arrows */}
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-between px-6">
+            <p className="font-dm mt-6 text-xl font-bold leading-[1.2] lg:text-2xl">
+              {allSlides[activeSlide].caption}
+            </p>
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                prevSlide();
-              }}
+              onClick={handleOpenGallery}
+              className="font-dm pointer-events-auto mt-6 rounded-full bg-sand px-6 py-3 text-base font-bold text-deep"
               data-cursor="focus"
-              className="pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full border border-white/30 bg-black/30 text-white backdrop-blur transition hover:bg-black/50"
-              aria-label="Previous slide"
             >
-              <ArrowLeft className="h-5 w-5" />
+              View the shoot
             </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                nextSlide();
-              }}
-              data-cursor="focus"
-              className="pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full border border-white/30 bg-black/30 text-white backdrop-blur transition hover:bg-black/50"
-              aria-label="Next slide"
-            >
-              <ArrowRight className="h-5 w-5" />
-            </button>
-          </div>
-
-          {/* Status + pagination at bottom */}
-          <div className="absolute bottom-8 left-6 right-6 flex items-center justify-between text-sm uppercase tracking-[0.4em] text-white/70 font-bold">
-            <span>
-              {activeSlide + 1}/{allSlides.length}
-            </span>
-            <span className="flex-1 text-center">
-              SCROLL STOPPED — EXPLORE MANUALLY
-            </span>
-            <span className="w-12" />
           </div>
         </motion.div>
 
-        {!carouselActive && (
-          <div className="pointer-events-none absolute bottom-10 left-1/2 -translate-x-1/2 rounded-full bg-white/90 px-6 py-2 text-xs font-semibold uppercase tracking-[0.4em] text-deep z-50">
-            Continue to scroll
-          </div>
-        )}
+        <motion.div
+          style={{ opacity: controlsOpacity }}
+          className="absolute bottom-6 left-4 right-4 flex items-center justify-between text-white md:left-6 md:right-6"
+        >
+          <button
+            onClick={prevSlide}
+            data-cursor="focus"
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-white/40 bg-black/20 backdrop-blur transition hover:bg-black/40"
+            aria-label="Previous slide"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </button>
+          <span className="font-dm text-sm font-bold">
+            {activeSlide + 1} / {allSlides.length}
+          </span>
+          <button
+            onClick={nextSlide}
+            data-cursor="focus"
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-white/40 bg-black/20 backdrop-blur transition hover:bg-black/40"
+            aria-label="Next slide"
+          >
+            <ArrowRight className="h-5 w-5" />
+          </button>
+        </motion.div>
       </div>
     </section>
   );
