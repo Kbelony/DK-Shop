@@ -98,6 +98,15 @@ export function GalleryPage() {
               <div className="img-shimmer aspect-[4/5] w-full" />
             </div>
             <div className="img-shimmer aspect-[16/10] w-full" />
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="img-shimmer aspect-[4/5] w-full" />
+              <div className="img-shimmer aspect-[3/4] w-full" />
+            </div>
+            <div className="img-shimmer aspect-[3/2] w-full" />
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="img-shimmer aspect-[3/4] w-full" />
+              <div className="img-shimmer aspect-[1/1] w-full" />
+            </div>
           </div>
         </section>
       )}

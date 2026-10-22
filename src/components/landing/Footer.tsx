@@ -1,5 +1,6 @@
+import { useNavigate } from "react-router-dom";
 import { SkeletonImage } from "@/components/ui/skeleton-image";
-import { scrollToId } from "@/lib/smoothScroll";
+import { goToSection } from "@/lib/smoothScroll";
 
 const links = [
   { label: "Collection", id: "bakes" },
@@ -9,6 +10,7 @@ const links = [
 ];
 
 export function Footer() {
+  const navigate = useNavigate();
   return (
     <footer id="contact" className="pb-6 pt-[120px] lg:pt-[222px]">
       <div className="grid gap-10 lg:grid-cols-[284px_1fr_500px] lg:gap-0">
@@ -16,7 +18,7 @@ export function Footer() {
           {links.map((l) => (
             <button
               key={l.id}
-              onClick={() => scrollToId(l.id)}
+              onClick={() => goToSection(l.id, navigate)}
               className="block"
               data-cursor="focus"
             >
@@ -58,7 +60,7 @@ export function Footer() {
         <span className="hidden lg:block" />
         <span>© {new Date().getFullYear()} Deborah Kabongo</span>
         <button
-          onClick={() => scrollToId("top")}
+          onClick={() => goToSection("top", navigate)}
           className="justify-self-end uppercase"
           data-cursor="focus"
         >

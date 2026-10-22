@@ -1,23 +1,9 @@
 import { SkeletonImage } from "@/components/ui/skeleton-image";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { news } from "@/data/news";
 
-const articles = [
-  {
-    title: "New collection in progress",
-    image:
-      "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/_DSC1423.jpg?raw=true",
-  },
-  {
-    title: "Behind the scenes of the latest photo shoot",
-    image:
-      "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/057_1U1A1561_DEBORA.jpg?raw=true",
-  },
-  {
-    title: "Fitting day with the models",
-    image:
-      "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/MB_Monica-366.jpeg?raw=true",
-  },
-];
+const articles = news;
 
 export function NewsSection() {
   return (
@@ -30,27 +16,30 @@ export function NewsSection() {
           <p className="text-base leading-[1.2] text-greyText">
             News, updates and behind-the-scenes stories from the studio and the photo shoots.
           </p>
-          <button
-            className="mt-7 rounded-full bg-ember px-8 py-3 text-base font-bold text-white transition-opacity hover:opacity-90"
+          <Link
+            to="/news"
+            className="mt-7 inline-block rounded-full bg-ember px-8 py-3 text-base font-bold text-white transition-opacity hover:opacity-90"
             data-cursor="focus"
           >
             View All
-          </button>
+          </Link>
         </div>
       </div>
 
       <div className="mt-[52px] grid gap-12 md:grid-cols-3 md:gap-10 lg:mt-16">
         {articles.map((article, idx) => (
-          <motion.a
-            href="#news"
-            key={article.title}
+          <motion.div
+            key={article.slug}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ delay: idx * 0.1, duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
-            className="group block"
-            data-cursor="focus"
           >
+            <Link
+              to={`/news/${article.slug}`}
+              className="group block"
+              data-cursor="focus"
+            >
             <div className="overflow-hidden">
               <SkeletonImage
                 src={article.image}
@@ -62,7 +51,8 @@ export function NewsSection() {
             <h3 className="font-display mt-6 text-xl leading-6">
               {article.title}
             </h3>
-          </motion.a>
+            </Link>
+          </motion.div>
         ))}
       </div>
     </section>

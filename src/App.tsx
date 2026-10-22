@@ -6,6 +6,7 @@ import { Navbar } from "./components/landing/Navbar";
 import { HeroIntroSection } from "./components/landing/HeroIntroSection";
 import { BehindDoughSection } from "./components/landing/BehindDoughSection";
 import { CreatorIntroSection } from "./components/landing/CreatorIntroSection";
+import { NewsListPage, NewsArticlePage } from "./components/news/NewsPages";
 import { OriginHeroSection } from "./components/landing/OriginHeroSection";
 import { NewsSection } from "./components/landing/NewsSection";
 import { Footer } from "./components/landing/Footer";
@@ -34,7 +35,7 @@ function App() {
   const [originOverlay, setOriginOverlay] = useState(false);
   const location = useLocation();
 
-  const isGalleryRoute = location.pathname.startsWith("/gallery");
+  const isGalleryRoute = location.pathname !== "/";
 
   useEffect(() => {
     if (isGalleryRoute && originOverlay) {
@@ -54,6 +55,8 @@ function App() {
               element={<LandingPage onOverlayToggle={setOriginOverlay} />}
             />
             <Route path="/gallery/:id" element={<GalleryPage />} />
+            <Route path="/news" element={<NewsListPage />} />
+            <Route path="/news/:slug" element={<NewsArticlePage />} />
           </Routes>
           <CustomCursor />
         </div>

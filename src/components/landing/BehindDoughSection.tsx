@@ -92,7 +92,7 @@ export function BehindDoughSection() {
             <article
               key={step.title}
               ref={(el) => (itemRefs.current[index] = el)}
-              className="pb-6 lg:pb-[316px]"
+              className="pb-14 last:pb-6 lg:pb-[200px]"
             >
               <h3 className="font-display relative inline-block text-[56px] leading-[1] lg:text-[128px]">
                 {step.title}
@@ -100,7 +100,7 @@ export function BehindDoughSection() {
                   {step.number}
                 </sup>
               </h3>
-              <p className="font-dm mt-10 text-2xl font-bold leading-[1.2] text-deep lg:mt-20">
+              <p className="font-dm mt-4 text-2xl font-bold leading-[1.2] text-deep lg:mt-8">
                 {step.label}
               </p>
               <p className="font-dm mt-3 text-base leading-[1.2] text-greyText">

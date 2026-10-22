@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { scrollToId } from "@/lib/smoothScroll";
+import { goToSection } from "@/lib/smoothScroll";
 
 interface MenuOverlayProps {
   open: boolean;
@@ -18,16 +18,10 @@ const menuEntries = [
 export function MenuOverlay({ open, onClose }: MenuOverlayProps) {
   const navigate = useNavigate();
 
-  // Close first, then glide to the section with Lenis (like the anchors of the reference)
+  // Close first, then glide to the section (waits for the menu to leave)
   const go = (id: string) => {
     onClose();
-    const run = () => window.setTimeout(() => scrollToId(id), 250);
-    if (window.location.pathname !== "/") {
-      navigate("/");
-      window.setTimeout(() => scrollToId(id), 500);
-    } else {
-      run();
-    }
+    window.setTimeout(() => goToSection(id, navigate), 350);
   };
 
   return (

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { MenuOverlay } from "./MenuOverlay";
-import { scrollToId } from "@/lib/smoothScroll";
+import { goToSection } from "@/lib/smoothScroll";
 
 interface NavbarProps {
   translucent?: boolean;
@@ -14,8 +14,7 @@ export function Navbar({ translucent = false }: NavbarProps) {
   const light = translucent;
 
   const goHome = () => {
-    if (window.location.pathname === "/") scrollToId("top");
-    else navigate("/");
+    goToSection("top", navigate);
   };
 
   return (

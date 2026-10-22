@@ -247,7 +247,7 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
 
   return (
     <section
-      id="about"
+      id="origin"
       ref={stickyRef}
       className="relative -mx-4 -mt-[22vh] h-[400vh] md:h-[500vh] md:-mx-6 md:mt-0 lg:mt-[120px]"
     >
