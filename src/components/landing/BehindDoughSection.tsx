@@ -38,19 +38,13 @@ export function BehindDoughSection() {
 
     const updateActiveFromScroll = () => {
       frame = null;
-      const viewportCenter = window.innerHeight / 2;
       let bestIndex = activeIndex;
-      let bestDistance = Number.POSITIVE_INFINITY;
 
+      // The picture changes when the next title reaches ~40% of the screen
+      const trigger = window.innerHeight * 0.4;
+      bestIndex = 0;
       itemRefs.current.forEach((el, idx) => {
-        if (!el) return;
-        const rect = el.getBoundingClientRect();
-        const center = rect.top + rect.height / 2;
-        const distance = Math.abs(center - viewportCenter);
-        if (distance < bestDistance) {
-          bestDistance = distance;
-          bestIndex = idx;
-        }
+        if (el && el.getBoundingClientRect().top <= trigger) bestIndex = idx;
       });
 
       if (bestIndex !== activeIndex) {
@@ -119,16 +113,20 @@ export function BehindDoughSection() {
         </div>
 
         <div className="relative hidden pl-[112px] lg:block">
-          <div className="sticky top-[104px] aspect-[696/422] w-full overflow-hidden">
+          {/* Sticky picture, full column width, natural proportions. It stays
+              put and swaps when the next title reaches the trigger line. */}
+          <div className="sticky top-[104px]">
             {steps.map((step, index) => (
-              <SkeletonImage
+              <img
                 key={step.title}
                 src={step.image}
                 alt={step.title}
-                wrapperClassName={`absolute inset-0 transition-opacity duration-300 ${
-                  index === activeIndex ? "opacity-100" : "opacity-0"
+                loading="eager"
+                className={`max-h-[calc(100vh-136px)] w-full object-contain object-top transition-opacity duration-500 ${
+                  index === activeIndex
+                    ? "relative opacity-100"
+                    : "pointer-events-none absolute left-0 top-0 opacity-0"
                 }`}
-                className="h-full w-full object-cover object-[50%_30%]"
               />
             ))}
           </div>
