@@ -1,3 +1,4 @@
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import { motion } from "framer-motion";
 
 const articles = [
@@ -51,10 +52,11 @@ export function NewsSection() {
             data-cursor="focus"
           >
             <div className="overflow-hidden">
-              <img
+              <SkeletonImage
                 src={article.image}
                 alt={article.title}
-                className="aspect-[437/292] w-full object-cover transition duration-700 group-hover:scale-105"
+                wrapperClassName="aspect-[437/292] w-full"
+                className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
               />
             </div>
             <h3 className="font-display mt-6 text-xl leading-6">

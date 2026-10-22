@@ -1,3 +1,4 @@
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import { scrollToId } from "@/lib/smoothScroll";
 
 const links = [
@@ -41,10 +42,11 @@ export function Footer() {
           </div>
         </div>
 
-        <img
+        <SkeletonImage
           src="https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/_DSC1423.jpg?raw=true"
           alt=""
-          className="h-[300px] w-full object-cover"
+          wrapperClassName="h-[300px] w-full"
+          className="h-full w-full object-cover"
         />
       </div>
 

@@ -1,3 +1,4 @@
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import { motion } from "framer-motion";
 
 const ease = [0.23, 1, 0.32, 1] as const;
@@ -32,10 +33,11 @@ export function HeroIntroSection() {
         transition={{ duration: 0.8, ease }}
         className="mt-10 overflow-hidden lg:mt-[64px]"
       >
-        <img
+        <SkeletonImage
           src="https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/001_1U1A0815_DEBORA.jpg?raw=true"
           alt="Model wearing a handmade piece"
-          className="h-[218px] w-full object-cover sm:h-[400px] lg:h-[602px]"
+          wrapperClassName="h-[218px] w-full sm:h-[400px] lg:h-[602px]"
+          className="h-full w-full object-cover"
         />
       </motion.div>
     </section>

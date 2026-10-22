@@ -1,3 +1,4 @@
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -90,8 +91,13 @@ export function GalleryPage() {
       {/* Images avec le même padding que la homepage */}
       {loading && (
         <section className="mx-auto w-full px-4 sm:px-6 lg:px-10 pb-24">
-          <div className="flex items-center justify-center h-96">
-            <p className="text-muted-foreground">Chargement...</p>
+          <div className="space-y-10" aria-busy="true" aria-label="Loading photos">
+            <div className="img-shimmer aspect-[3/2] w-full" />
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="img-shimmer aspect-[3/4] w-full" />
+              <div className="img-shimmer aspect-[4/5] w-full" />
+            </div>
+            <div className="img-shimmer aspect-[16/10] w-full" />
           </div>
         </section>
       )}
@@ -121,9 +127,15 @@ export function GalleryPage() {
                       className="overflow-hidden cursor-pointer"
                       onClick={() => setLightboxIndex(index + pairIndex)}
                     >
-                      <img
+                      <SkeletonImage
                         src={pairImage.src}
                         alt={pairImage.alt}
+                        wrapperClassName="w-full"
+                        placeholderClassName={
+                          (index + pairIndex) % 2 === 0
+                            ? "aspect-[3/4]"
+                            : "aspect-[4/5]"
+                        }
                         className="w-full h-auto object-contain"
                       />
                     </motion.div>
@@ -149,9 +161,11 @@ export function GalleryPage() {
                   className="overflow-hidden cursor-pointer"
                   onClick={() => setLightboxIndex(index)}
                 >
-                  <img
+                  <SkeletonImage
                     src={image.src}
                     alt={image.alt}
+                    wrapperClassName="w-full"
+                    placeholderClassName="aspect-[3/2]"
                     className="w-full h-auto object-contain"
                   />
                 </motion.div>

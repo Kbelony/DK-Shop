@@ -61,7 +61,7 @@ export function ImageLightbox({
         {/* Bouton fermer */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20"
+          className="absolute top-4 right-4 z-30 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20"
           aria-label="Close"
           data-cursor="focus"
         >
@@ -80,7 +80,10 @@ export function ImageLightbox({
             if (info.offset.x < -50) onNext();
             else if (info.offset.x > 50) onPrevious();
           }}
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (e.target === e.currentTarget) onClose();
+          }}
         >
           <AnimatePresence initial={false} custom={dir} mode="popLayout">
             <motion.img
@@ -99,6 +102,7 @@ export function ImageLightbox({
               exit="exit"
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
               className="max-h-full max-w-full object-contain"
+              onClick={(e) => e.stopPropagation()}
             />
           </AnimatePresence>
 

@@ -2,8 +2,9 @@
 import { useRef, useState, useEffect } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import {
-  AnimatePresence,
+  animate,
   motion,
+  useMotionValue,
   type MotionValue,
   useMotionValueEvent,
   useScroll,
@@ -91,6 +92,73 @@ function SlideImage({
   );
 }
 
+/**
+ * Every slide (centre and sides) uses this one component, so they always have
+ * exactly the same size. Only the horizontal offset differs.
+ */
+function Slide({
+  slide,
+  offset,
+  scaleX,
+  scaleY,
+  invX,
+  invY,
+  sideOpacity,
+  dark,
+  onOpen,
+}: {
+  slide: { id: string; src: string; caption: string };
+  offset: number;
+  scaleX: MotionValue<number>;
+  scaleY: MotionValue<number>;
+  invX: MotionValue<number>;
+  invY: MotionValue<number>;
+  sideOpacity: MotionValue<number>;
+  dark: MotionValue<number>;
+  onOpen: () => void;
+}) {
+  const d = useMotionValue(offset);
+  useEffect(() => {
+    const c = animate(d, offset, { duration: 0.5, ease: [0.22, 1, 0.36, 1] });
+    return () => c.stop();
+  }, [offset, d]);
+  const x = useTransform([d, scaleX], ([dd, sx]: number[]) => {
+    const W = document.documentElement.clientWidth;
+    return dd * (W * sx + 16);
+  });
+  const opacity = useTransform([d, sideOpacity], ([dd, so]: number[]) =>
+    Math.abs(dd) < 1 ? 1 : so
+  );
+  return (
+    <motion.div
+      style={{ x, opacity, zIndex: offset === 0 ? 2 : 1, willChange: "transform" }}
+      className="absolute inset-0"
+    >
+      <motion.div
+        style={{ scaleX, scaleY, willChange: "transform" }}
+        onClick={offset === 0 ? onOpen : undefined}
+        className="absolute inset-0 cursor-pointer overflow-hidden"
+      >
+        <motion.div
+          style={{ scaleX: invX, scaleY: invY, willChange: "transform" }}
+          className="img-shimmer absolute inset-0"
+        >
+          <SlideImage
+            src={slide.src}
+            alt={slide.caption}
+            scaleX={scaleX}
+            scaleY={scaleY}
+          />
+          <motion.div
+            style={{ opacity: dark }}
+            className="absolute inset-0 bg-black"
+          />
+        </motion.div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 interface OriginHeroSectionProps {
   onOverlayToggle?: (isTransparent: boolean) => void;
 }
@@ -145,23 +213,16 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
   const scaleY = useTransform(scrollYProgress, [0.02, 0.35], [sy0, 1], { ease });
   const invX = useTransform(scaleX, (v) => 1 / v);
   const invY = useTransform(scaleY, (v) => 1 / v);
-  const leftX = useTransform(scrollYProgress, [0.02, 0.35], ["0vw", "-60vw"], { ease });
-  const rightX = useTransform(scrollYProgress, [0.02, 0.35], ["0vw", "60vw"], { ease });
   const sideOpacity = useTransform(scrollYProgress, [0.02, 0.25], [1, 0]);
   const dark = useTransform(scrollYProgress, [0.35, 0.55], [0, 0.55]);
   const textY = useTransform(scrollYProgress, [0.45, 0.8], ["100vh", "0vh"]);
   const textOpacity = useTransform(scrollYProgress, [0.45, 0.6], [0, 1]);
   const controlsOpacity = useTransform(scrollYProgress, [0.75, 0.88], [0, 1]);
 
-  const [dir, setDir] = useState(1);
-  const shift =
-    (typeof window === "undefined" ? 390 : window.innerWidth) * (mobile ? 0.72 : 0.56) + 16;
   const nextSlide = () => {
-    setDir(1);
     setActiveSlide((prev) => Math.min(prev + 1, allSlides.length - 1));
   };
   const prevSlide = () => {
-    setDir(-1);
     setActiveSlide((prev) => Math.max(prev - 1, 0));
   };
 
@@ -196,92 +257,20 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
           style={{ touchAction: "pan-y" }}
           className="absolute inset-0"
         >
-          <motion.div
-            style={{ scaleX, scaleY, willChange: "transform" }}
-            onClick={() => carouselActive && handleOpenGallery()}
-            className="absolute inset-0 cursor-pointer overflow-hidden"
-          >
-            <motion.div
-              style={{ scaleX: invX, scaleY: invY, willChange: "transform" }}
-              className="absolute inset-0"
-            >
-              <AnimatePresence initial={false} custom={{ d: dir, full: carouselActive }}>
-                <motion.div
-                  key={allSlides[activeSlide].id}
-                  custom={{ d: dir, full: carouselActive }}
-                  variants={{
-                    enter: ({ d }: { d: number }) => ({ x: `${d * 100}%`, opacity: 1 }),
-                    center: { x: "0%", opacity: 1 },
-                    exit: ({ d, full }: { d: number; full: boolean }) =>
-                      full
-                        ? { x: `${d * -30}%`, opacity: 0 }
-                        : { x: `${d * -100}%`, opacity: 1 },
-                  }}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                  style={{ willChange: "transform" }}
-                  className="absolute inset-0"
-                >
-                  <SlideImage
-                    src={allSlides[activeSlide].src}
-                    alt={allSlides[activeSlide].caption}
-                    scaleX={scaleX}
-                    scaleY={scaleY}
-                  />
-                </motion.div>
-              </AnimatePresence>
-              <motion.div
-                style={{ opacity: dark }}
-                className="absolute inset-0 bg-black"
-              />
-            </motion.div>
-          </motion.div>
-          <motion.div
-            style={{ x: leftX, top: 0, bottom: 0, opacity: sideOpacity, right: `calc(100% - ${insetX} + 1rem)`, willChange: "transform, opacity" }}
-            className="pointer-events-none absolute flex w-max items-center gap-4"
-          >
-            <motion.div
-              key={activeSlide}
-              initial={{ x: dir * shift }}
-              animate={{ x: 0 }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="flex h-full items-center gap-4"
-            >
-              {allSlides.slice(0, activeSlide).map((slide) => (
-              <img
-                key={slide.id}
-                src={slide.src}
-                alt={slide.caption}
-                draggable={false}
-                className="h-[40%] w-[72vw] shrink-0 object-cover md:h-[50%] md:w-[56vw]"
-              />
-            ))}
-            </motion.div>
-          </motion.div>
-          <motion.div
-            style={{ x: rightX, top: 0, bottom: 0, opacity: sideOpacity, left: `calc(100% - ${insetX} + 1rem)`, willChange: "transform, opacity" }}
-            className="pointer-events-none absolute flex w-max items-center gap-4"
-          >
-            <motion.div
-              key={activeSlide}
-              initial={{ x: dir * shift }}
-              animate={{ x: 0 }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="flex h-full items-center gap-4"
-            >
-              {allSlides.slice(activeSlide + 1).map((slide) => (
-              <img
-                key={slide.id}
-                src={slide.src}
-                alt={slide.caption}
-                draggable={false}
-                className="h-[40%] w-[72vw] shrink-0 object-cover md:h-[50%] md:w-[56vw]"
-              />
-            ))}
-            </motion.div>
-          </motion.div>
+          {allSlides.map((slide, i) => (
+            <Slide
+              key={slide.id}
+              slide={slide}
+              offset={i - activeSlide}
+              scaleX={scaleX}
+              scaleY={scaleY}
+              invX={invX}
+              invY={invY}
+              sideOpacity={sideOpacity}
+              dark={dark}
+              onOpen={() => carouselActive && handleOpenGallery()}
+            />
+          ))}
         </motion.div>
 
         <motion.div

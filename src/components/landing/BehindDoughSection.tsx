@@ -1,3 +1,4 @@
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import { useEffect, useRef, useState } from "react";
 
 const steps = [
@@ -106,10 +107,11 @@ export function BehindDoughSection() {
                 {step.copy}
               </p>
               <div className="mt-10 overflow-hidden lg:hidden">
-                <img
+                <SkeletonImage
                   src={step.image}
                   alt={step.title}
-                  className="h-[218px] w-full object-cover sm:h-[360px]"
+                  wrapperClassName="h-[218px] w-full sm:h-[360px]"
+                  className="h-full w-full object-cover"
                 />
               </div>
             </article>
@@ -119,13 +121,14 @@ export function BehindDoughSection() {
         <div className="relative hidden pl-[112px] lg:block">
           <div className="sticky top-[104px] aspect-[696/422] w-full overflow-hidden">
             {steps.map((step, index) => (
-              <img
+              <SkeletonImage
                 key={step.title}
                 src={step.image}
                 alt={step.title}
-                className={`absolute inset-0 h-full w-full object-cover object-[50%_30%] transition-opacity duration-300 ${
+                wrapperClassName={`absolute inset-0 transition-opacity duration-300 ${
                   index === activeIndex ? "opacity-100" : "opacity-0"
                 }`}
+                className="h-full w-full object-cover object-[50%_30%]"
               />
             ))}
           </div>
