@@ -134,7 +134,7 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
     <section
       id="about"
       ref={stickyRef}
-      className="relative -mx-4 -mt-[28vh] h-[400vh] md:h-[500vh] md:-mx-6 md:mt-0 lg:mt-[120px]"
+      className="relative -mx-4 -mt-[22vh] h-[400vh] md:h-[500vh] md:-mx-6 md:mt-0 lg:mt-[120px]"
     >
       <div className="sticky top-0 h-[100vh] overflow-hidden">
         <motion.div
@@ -154,17 +154,20 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
               style={{ scaleX: invX, scaleY: invY, willChange: "transform" }}
               className="absolute inset-0"
             >
-              <AnimatePresence initial={false} custom={dir}>
+              <AnimatePresence initial={false} custom={{ d: dir, full: carouselActive }}>
                 <motion.img
                   key={allSlides[activeSlide].id}
                   src={allSlides[activeSlide].src}
                   alt={allSlides[activeSlide].caption}
                   draggable={false}
-                  custom={dir}
+                  custom={{ d: dir, full: carouselActive }}
                   variants={{
-                    enter: (d: number) => ({ x: `${d * 100}%`, opacity: 1 }),
+                    enter: ({ d }: { d: number }) => ({ x: `${d * 100}%`, opacity: 1 }),
                     center: { x: "0%", opacity: 1 },
-                    exit: (d: number) => ({ x: `${d * -30}%`, opacity: 0 }),
+                    exit: ({ d, full }: { d: number; full: boolean }) =>
+                      full
+                        ? { x: `${d * -30}%`, opacity: 0 }
+                        : { x: `${d * -100}%`, opacity: 1 },
                   }}
                   initial="enter"
                   animate="center"
