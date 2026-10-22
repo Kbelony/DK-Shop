@@ -9,7 +9,7 @@ interface MenuOverlayProps {
 
 // label -> section id on the landing page
 const menuEntries = [
-  { label: "Bakes", id: "bakes" },
+  { label: "Collection", id: "bakes" },
   { label: "About", id: "about" },
   { label: "News", id: "news" },
   { label: "Contact", id: "contact" },
@@ -44,12 +44,12 @@ export function MenuOverlay({ open, onClose }: MenuOverlayProps) {
               onClick={() => go("top")}
               className="font-display text-[26px] leading-6 tracking-[-0.04em] text-ember"
               data-cursor="focus"
-              aria-label="Retour à l'accueil"
+              aria-label="Back to home"
             >
-              Bakeat
+              DK-Shop
             </button>
             <div className="font-dm flex items-center gap-10 text-base font-bold text-deep">
-              <span className="hidden sm:inline">London, UK</span>
+              <span className="hidden sm:inline">Handmade clothing</span>
               <button
                 onClick={onClose}
                 className="flex items-center gap-2"
@@ -79,12 +79,12 @@ export function MenuOverlay({ open, onClose }: MenuOverlayProps) {
             <div className="font-dm space-y-6 text-base text-deep lg:text-right">
               <div>
                 <p className="text-2xl font-bold">/Contact Info</p>
-                <p className="text-greyText">hello@bakeat.com</p>
-                <p className="text-greyText">+44 20 1234 5678</p>
+                <p className="text-greyText">hello@dk-shop.com</p>
+                <p className="text-greyText">+00 000 000 000</p>
               </div>
               <div>
-                <p className="text-2xl font-bold">/Address</p>
-                <p className="text-greyText">21 Bloomsbury Way, WC1A 2TH</p>
+                <p className="text-2xl font-bold">/Studio</p>
+                <p className="text-greyText">By appointment only</p>
               </div>
             </div>
           </div>

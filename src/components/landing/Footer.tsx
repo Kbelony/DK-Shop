@@ -1,7 +1,7 @@
 import { scrollToId } from "@/lib/smoothScroll";
 
 const links = [
-  { label: "Bakes", id: "bakes" },
+  { label: "Collection", id: "bakes" },
   { label: "About", id: "about" },
   { label: "News", id: "news" },
   { label: "Contact", id: "contact" },
@@ -27,17 +27,17 @@ export function Footer() {
         <div className="font-dm space-y-4 text-base leading-[1.2] text-greyText">
           <div>
             <p className="text-2xl font-bold leading-[1.2] text-deep">/Contact Info</p>
-            <p className="mt-2">hello@bakeat.com</p>
-            <p>+44 20 1234 5678</p>
+            <p className="mt-2">hello@dk-shop.com</p>
+            <p>+00 000 000 000</p>
           </div>
           <div>
-            <p className="text-2xl font-bold leading-[1.2] text-deep">/Address</p>
-            <p className="mt-2">21 Bloomsbury Way, WC1A 2TH</p>
+            <p className="text-2xl font-bold leading-[1.2] text-deep">/Studio</p>
+            <p className="mt-2">By appointment only</p>
           </div>
           <div>
-            <p className="text-2xl font-bold leading-[1.2] text-deep">/Time</p>
-            <p className="mt-2">Wed-Sun: 8 a.m. - 4 p.m.</p>
-            <p>Mon-Tue: CLOSED</p>
+            <p className="text-2xl font-bold leading-[1.2] text-deep">/Fittings</p>
+            <p className="mt-2">Photo shoots and fittings</p>
+            <p>on request</p>
           </div>
         </div>
 

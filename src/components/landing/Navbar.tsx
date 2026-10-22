@@ -29,9 +29,9 @@ export function Navbar({ translucent = false }: NavbarProps) {
               light ? "text-white" : "text-ember"
             )}
             data-cursor="focus"
-            aria-label="Retour à l'accueil"
+            aria-label="Back to home"
           >
-            Bakeat
+            DK-Shop
           </button>
 
           <div
@@ -40,7 +40,7 @@ export function Navbar({ translucent = false }: NavbarProps) {
               light ? "text-white" : "text-deep"
             )}
           >
-            <span className="hidden sm:inline">London, UK</span>
+            <span className="hidden sm:inline">Handmade clothing</span>
             <button
               onClick={() => setOpen(true)}
               className="flex items-center gap-3"

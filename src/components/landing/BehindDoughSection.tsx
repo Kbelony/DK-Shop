@@ -4,24 +4,24 @@ const steps = [
   {
     title: "Dresses",
     number: "01",
-    label: "/Finest ingredients",
-    copy: "At Bakeat, every creation starts with the finest ingredients and a passion for perfection. Our bakers carefully mix each batch with love, ensuring the perfect balance of flavors and textures. From the very first step, we pour our hearts into crafting something truly special.",
+    label: "/Chosen fabrics",
+    copy: "Every piece starts with the fabric. Each one is chosen for how it hangs, moves and feels, then cut by hand to a pattern drawn for this piece only.",
     image:
       "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/_DSC1423.jpg?raw=true",
   },
   {
     title: "Jackets",
     number: "02",
-    label: "/Wood-fired balance",
-    copy: "Les pains reposent sur pierre, les braises sont rassemblées d'un côté pour créer une chaleur douce qui caramélise la croûte sans brûler.",
+    label: "/Careful construction",
+    copy: "Each seam is sewn and pressed slowly. Fittings and small adjustments keep the shape exactly as the sketch intended.",
     image:
       "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/009_1U1A0904_DEBORA_Original.jpg?raw=true",
   },
   {
     title: "Pants",
     number: "03",
-    label: "/Savor together",
-    copy: "On sert chaud sur des tables communes avec beurre battu maison et confitures fermentées. Chaque service raconte une histoire.",
+    label: "/Worn by real people",
+    copy: "Each finished piece is shown on a model in a photo shoot. Every shoot tells a small story about the clothes.",
     image:
       "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/IMG_7186.jpg?raw=true",
   },
@@ -31,7 +31,7 @@ export function BehindDoughSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const itemRefs = useRef<(HTMLElement | null)[]>([]);
 
-  // Stable synchronisation image/titre : basé sur la proximité du centre de l'écran
+  // Keep image and title in sync: closest step to the screen centre wins
   useEffect(() => {
     let frame: number | null = null;
 
@@ -65,7 +65,7 @@ export function BehindDoughSection() {
 
     window.addEventListener("scroll", onScrollOrResize, { passive: true });
     window.addEventListener("resize", onScrollOrResize);
-    // Première synchro
+    // Initial sync
     updateActiveFromScroll();
 
     return () => {
@@ -83,7 +83,7 @@ export function BehindDoughSection() {
       <div className="mt-0 lg:grid lg:grid-cols-[233px_351px_1fr]">
         <div className="mb-6 lg:mb-0">
           <p className="font-dm text-xs uppercase text-greyLabel lg:sticky lg:top-[84px]">
-            Behind the dough
+            Behind the seams
           </p>
         </div>
         <div>

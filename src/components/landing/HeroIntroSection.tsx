@@ -12,8 +12,8 @@ export function HeroIntroSection() {
           transition={{ duration: 0.8, ease }}
           className="font-display text-[68px] leading-[1] tracking-[-4px] text-deep sm:text-[110px] lg:text-[150px]"
         >
-          Pour, make,
-          <br /> bake, <span className="text-ember">share.</span>
+          Cut it, sew it,
+          <br /> <span className="text-ember">wear it.</span>
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 32 }}
@@ -21,10 +21,7 @@ export function HeroIntroSection() {
           transition={{ duration: 0.8, ease, delay: 0.1 }}
           className="font-dm text-xl font-bold leading-[1.2] text-deep lg:relative lg:top-[120px] lg:text-2xl lg:leading-[1.2]"
         >
-          Nous travaillons en duo texte &amp; gestes : l&apos;un raconte
-          l&apos;origine des grains, l&apos;autre surveille les flammes.
-          Ensemble, on compose des moments simples, presque pauvres dans la
-          forme, riches dans le goût.
+          Every piece is designed, cut and sewn by one maker. Simple shapes, careful finishing, and photo shoots where real models wear the clothes.
         </motion.p>
       </div>
 
@@ -37,7 +34,7 @@ export function HeroIntroSection() {
       >
         <img
           src="https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/001_1U1A0815_DEBORA.jpg?raw=true"
-          alt="Bakeat atelier"
+          alt="Model wearing a handmade piece"
           className="h-[218px] w-full object-cover sm:h-[400px] lg:h-[602px]"
         />
       </motion.div>
