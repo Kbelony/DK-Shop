@@ -278,7 +278,7 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
 
         <motion.div
           style={{ y: textY, opacity: textOpacity }}
-          className="pointer-events-none absolute inset-0 flex items-center px-4 text-sand md:px-6 lg:pl-[744px]"
+          className="pointer-events-none absolute inset-0 z-10 flex items-center px-4 text-sand md:px-6 lg:pl-[744px]"
         >
           <div className="max-w-[672px]">
             <h2 className="font-display text-[56px] leading-[1] lg:text-[128px]">
@@ -299,7 +299,7 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
 
         <motion.div
           style={{ opacity: controlsOpacity }}
-          className="absolute bottom-6 left-4 right-4 flex items-center justify-between text-white md:left-6 md:right-6"
+          className="absolute bottom-6 left-4 right-4 z-10 flex items-center justify-between text-white md:left-6 md:right-6"
         >
           <button
             onClick={prevSlide}
