@@ -39,11 +39,11 @@ export function ImageLightbox({
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [isOpen, onClose, onNext, onPrevious]);
 
-  if (!isOpen || !images[currentIndex]) return null;
-
   return (
     <AnimatePresence>
+      {isOpen && images[currentIndex] && (
       <motion.div
+        key="lightbox"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -70,10 +70,10 @@ export function ImageLightbox({
 
         {/* Image */}
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          transition={{ duration: 0.3 }}
+          initial={{ scale: 0.92, opacity: 0, y: 16 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          exit={{ scale: 0.95, opacity: 0, y: 8 }}
+          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
           className="relative z-10 flex h-full w-full items-center justify-center overflow-hidden px-4 pb-16 pt-20 md:h-[90vh] md:w-[90vw] md:p-0"
           style={{ touchAction: "pan-y" }}
           onPanEnd={(_, info) => {
@@ -142,6 +142,7 @@ export function ImageLightbox({
           )}
         </motion.div>
       </motion.div>
+      )}
     </AnimatePresence>
   );
 }

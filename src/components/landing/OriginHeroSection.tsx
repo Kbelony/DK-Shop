@@ -121,6 +121,7 @@ function Slide({
   dark: MotionValue<number>;
   onOpen: () => void;
 }) {
+  const down = useRef<{ x: number; y: number; t: number } | null>(null);
   const d = useMotionValue(offset);
   useEffect(() => {
     const c = animate(d, offset, { duration: 0.5, ease: [0.22, 1, 0.36, 1] });
@@ -140,7 +141,20 @@ function Slide({
     >
       <motion.div
         style={{ scaleX, scaleY, willChange: "transform" }}
-        onClick={offset === 0 ? onOpen : undefined}
+        onPointerDown={(e) => {
+          down.current = { x: e.clientX, y: e.clientY, t: Date.now() };
+        }}
+        onPointerUp={(e) => {
+          const d0 = down.current;
+          down.current = null;
+          // a tap: tiny move, short press. A swipe must never open the gallery.
+          if (
+            d0 &&
+            Math.hypot(e.clientX - d0.x, e.clientY - d0.y) < 8 &&
+            Date.now() - d0.t < 600
+          )
+            onOpen();
+        }}
         className="img-shimmer pointer-events-auto absolute inset-0 cursor-pointer overflow-hidden"
       >
         <motion.div
@@ -271,7 +285,7 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
               invY={invY}
               sideOpacity={sideOpacity}
               dark={dark}
-              onOpen={() => carouselActive && handleOpenGallery()}
+              onOpen={() => navigate(`/gallery/${slide.id}`)}
             />
           ))}
         </motion.div>

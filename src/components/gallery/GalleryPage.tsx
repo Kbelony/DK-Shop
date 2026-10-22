@@ -1,5 +1,5 @@
 import { SkeletonImage } from "@/components/ui/skeleton-image";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useGallery } from "@/hooks/useGallery";
@@ -10,6 +10,9 @@ export function GalleryPage() {
   const navigate = useNavigate();
   const { gallery, loading, error } = useGallery(id);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  // keep the last photo on screen while the lightbox plays its closing animation
+  const lastIndex = useRef(0);
+  if (lightboxIndex !== null) lastIndex.current = lightboxIndex;
 
   // Scroll en haut de la page au chargement - plusieurs méthodes pour être sûr
   useLayoutEffect(() => {
@@ -195,10 +198,10 @@ export function GalleryPage() {
       )}
 
       {/* Lightbox */}
-      {gallery && lightboxIndex !== null && (
+      {gallery && (
         <ImageLightbox
           images={gallery.images}
-          currentIndex={lightboxIndex}
+          currentIndex={lightboxIndex ?? lastIndex.current}
           isOpen={lightboxIndex !== null}
           onClose={() => setLightboxIndex(null)}
           onNext={() =>

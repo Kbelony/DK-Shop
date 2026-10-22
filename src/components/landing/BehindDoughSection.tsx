@@ -79,7 +79,7 @@ export function BehindDoughSection() {
   return (
     <section
       id="bakes"
-      className="relative mt-[120px] lg:mt-[309px]"
+      className="relative mt-12 lg:mt-[140px]"
     >
       <div className="mt-0 lg:grid lg:grid-cols-[233px_351px_1fr]">
         <div className="mb-6 lg:mb-0">
