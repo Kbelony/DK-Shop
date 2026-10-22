@@ -73,10 +73,6 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
 
     const shouldShowCarousel = latest > 0.8;
     if (carouselRef.current !== shouldShowCarousel) {
-      // When entering fullscreen carousel, reset to middle slide
-      if (!carouselRef.current && shouldShowCarousel) {
-        setActiveSlide(INITIAL_SLIDE);
-      }
       carouselRef.current = shouldShowCarousel;
       setCarouselActive(shouldShowCarousel);
     }
@@ -107,9 +103,9 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
   const controlsOpacity = useTransform(scrollYProgress, [0.8, 0.9], [0, 1]);
 
   const nextSlide = () =>
-    setActiveSlide((prev) => (prev + 1) % allSlides.length);
+    setActiveSlide((prev) => Math.min(prev + 1, allSlides.length - 1));
   const prevSlide = () =>
-    setActiveSlide((prev) => (prev - 1 + allSlides.length) % allSlides.length);
+    setActiveSlide((prev) => Math.max(prev - 1, 0));
 
   const handleOpenGallery = () => {
     const current = allSlides[activeSlide];
@@ -134,37 +130,55 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
       className="relative -mx-4 mt-[100px] h-[500vh] md:-mx-6 lg:mt-[200px]"
     >
       <div className="sticky top-0 h-screen overflow-hidden bg-sand">
-        <div className="flex h-full w-full items-center justify-center gap-4">
-          {allSlides.map((slide, i) =>
-            i === 2 ? (
-              <motion.div
-                key={slide.id}
-                style={{ width: centerW, height: centerH }}
-                className="relative shrink-0 cursor-pointer overflow-hidden"
-                onClick={() => carouselActive && handleOpenGallery()}
-              >
-                <img
-                  key={carouselActive ? allSlides[activeSlide].src : slide.src}
-                  src={carouselActive ? allSlides[activeSlide].src : slide.src}
-                  alt={slide.caption}
-                  className="h-full w-full object-cover"
-                />
-                <motion.div
-                  style={{ opacity: dark }}
-                  className="absolute inset-0 bg-black"
-                />
-              </motion.div>
-            ) : (
+        <motion.div
+          onPanEnd={(_, info) => {
+            if (info.offset.x < -40) nextSlide();
+            else if (info.offset.x > 40) prevSlide();
+          }}
+          style={{ touchAction: "pan-y" }}
+          className="flex h-full w-full items-center gap-4"
+        >
+          <div className="flex min-w-0 flex-1 justify-end gap-4">
+            {allSlides.slice(0, activeSlide).map((slide) => (
               <motion.img
                 key={slide.id}
                 src={slide.src}
                 alt={slide.caption}
+                draggable={false}
                 style={{ opacity: sideOpacity }}
                 className="h-[40vh] w-[30vw] shrink-0 object-cover md:h-[50vh]"
               />
-            )
-          )}
-        </div>
+            ))}
+          </div>
+          <motion.div
+            style={{ width: centerW, height: centerH }}
+            className="relative shrink-0 cursor-pointer overflow-hidden"
+            onClick={() => carouselActive && handleOpenGallery()}
+          >
+            <img
+              src={allSlides[activeSlide].src}
+              alt={allSlides[activeSlide].caption}
+              draggable={false}
+              className="h-full w-full object-cover"
+            />
+            <motion.div
+              style={{ opacity: dark }}
+              className="absolute inset-0 bg-black"
+            />
+          </motion.div>
+          <div className="flex min-w-0 flex-1 justify-start gap-4">
+            {allSlides.slice(activeSlide + 1).map((slide) => (
+              <motion.img
+                key={slide.id}
+                src={slide.src}
+                alt={slide.caption}
+                draggable={false}
+                style={{ opacity: sideOpacity }}
+                className="h-[40vh] w-[30vw] shrink-0 object-cover md:h-[50vh]"
+              />
+            ))}
+          </div>
+        </motion.div>
 
         <motion.div
           style={{ y: textY, opacity: textOpacity }}
