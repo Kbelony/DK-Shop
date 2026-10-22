@@ -34,25 +34,16 @@ export function CustomCursor() {
     };
   }, [x, y]);
 
+  // Delegated: works for links and buttons that mount after the first render
   useEffect(() => {
     const isCoarse = window.matchMedia("(pointer: coarse)").matches;
     if (isCoarse) return;
-
-    const targets = document.querySelectorAll("[data-cursor='focus']");
-    const enter = () => setFocus(true);
-    const leave = () => setFocus(false);
-
-    targets.forEach((target) => {
-      target.addEventListener("pointerenter", enter, { passive: true });
-      target.addEventListener("pointerleave", leave, { passive: true });
-    });
-
-    return () => {
-      targets.forEach((target) => {
-        target.removeEventListener("pointerenter", enter);
-        target.removeEventListener("pointerleave", leave);
-      });
+    const onOver = (e: PointerEvent) => {
+      const el = e.target as Element | null;
+      setFocus(!!el?.closest?.("[data-cursor='focus']"));
     };
+    window.addEventListener("pointerover", onOver, { passive: true });
+    return () => window.removeEventListener("pointerover", onOver);
   }, []);
 
   if (!visible) return null;
@@ -63,7 +54,7 @@ export function CustomCursor() {
         translateX: springX,
         translateY: springY,
       }}
-      className="fixed z-[999] pointer-events-none hidden lg:block"
+      className="fixed left-0 top-0 z-[999] pointer-events-none hidden lg:block"
     >
       <span
         className={`block rounded-full border border-deep/40 bg-white/30 backdrop-blur-sm transition-all duration-300 ${
