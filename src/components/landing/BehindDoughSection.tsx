@@ -86,7 +86,7 @@ export function BehindDoughSection() {
             <article
               key={step.title}
               ref={(el) => (itemRefs.current[index] = el)}
-              className="pb-14 last:pb-6 lg:min-h-[78vh] lg:pb-0 lg:last:pb-0"
+              className="pb-14 last:pb-6 lg:pb-[200px]"
             >
               <h3 className="font-display relative inline-block text-[56px] leading-[1] lg:text-[128px]">
                 {step.title}
@@ -113,17 +113,19 @@ export function BehindDoughSection() {
         </div>
 
         <div className="relative hidden pl-[112px] lg:block">
-          {/* Sticky picture, one fixed 16:10 box for all photos. It stays
+          {/* Sticky picture, full column width, natural proportions. It stays
               put and swaps when the next title reaches the trigger line. */}
-          <div className="sticky top-[104px] aspect-[16/10] max-h-[calc(100vh-136px)] w-full overflow-hidden">
+          <div className="sticky top-[104px]">
             {steps.map((step, index) => (
               <img
                 key={step.title}
                 src={step.image}
                 alt={step.title}
                 loading="eager"
-                className={`absolute inset-0 h-full w-full object-cover object-[50%_30%] transition-opacity duration-500 ${
-                  index === activeIndex ? "opacity-100" : "opacity-0"
+                className={`max-h-[calc(100vh-136px)] w-full object-contain object-top transition-opacity duration-500 ${
+                  index === activeIndex
+                    ? "relative opacity-100"
+                    : "pointer-events-none absolute left-0 top-0 opacity-0"
                 }`}
               />
             ))}
