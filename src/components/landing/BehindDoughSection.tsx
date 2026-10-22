@@ -91,7 +91,7 @@ export function BehindDoughSection() {
             <article
               key={step.title}
               ref={(el) => (itemRefs.current[index] = el)}
-              className="pb-[100px] lg:pb-[316px]"
+              className="pb-10 lg:pb-[316px]"
             >
               <h3 className="font-display relative inline-block text-[56px] leading-[1] lg:text-[128px]">
                 {step.title}

@@ -65,13 +65,13 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
   }, []);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const shouldOverlay = latest > 0.35 && latest < 0.98;
+    const shouldOverlay = latest > 0.25 && latest < 0.98;
     if (overlayRef.current !== shouldOverlay) {
       overlayRef.current = shouldOverlay;
       onOverlayToggle?.(shouldOverlay);
     }
 
-    const shouldShowCarousel = latest > 0.8;
+    const shouldShowCarousel = latest > 0.6;
     if (carouselRef.current !== shouldShowCarousel) {
       carouselRef.current = shouldShowCarousel;
       setCarouselActive(shouldShowCarousel);
@@ -84,23 +84,21 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
   // the side photos are pushed out and fade, the photo darkens, then the text
   // rises over it. The section is sticky, so scrolling never stops.
   const ease = (t: number) => 1 - Math.pow(1 - t, 3);
-  const centerW = useTransform(
-    scrollYProgress,
-    [0.1, 0.4],
-    [mobile ? "72vw" : "56vw", "100vw"],
-    { ease }
-  );
-  const centerH = useTransform(
-    scrollYProgress,
-    [0.1, 0.4],
-    [mobile ? "40vh" : "50vh", "100vh"],
-    { ease }
-  );
-  const sideOpacity = useTransform(scrollYProgress, [0.1, 0.3], [1, 0]);
-  const dark = useTransform(scrollYProgress, [0.4, 0.6], [0, 0.55]);
-  const textY = useTransform(scrollYProgress, [0.55, 0.85], ["100vh", "0vh"]);
-  const textOpacity = useTransform(scrollYProgress, [0.55, 0.72], [0, 1]);
-  const controlsOpacity = useTransform(scrollYProgress, [0.8, 0.9], [0, 1]);
+  // The centre photo is always full-screen; a clip-path "window" opens up to
+  // the whole screen. Only compositor-friendly properties animate (no layout).
+  const insetY = mobile ? "30svh" : "25svh";
+  const insetX = mobile ? "14vw" : "22vw";
+  const clip = useTransform(scrollYProgress, [0.02, 0.35], [
+    `inset(${insetY} ${insetX} ${insetY} ${insetX})`,
+    "inset(0svh 0vw 0svh 0vw)",
+  ], { ease });
+  const leftX = useTransform(scrollYProgress, [0.02, 0.35], ["0vw", "-60vw"], { ease });
+  const rightX = useTransform(scrollYProgress, [0.02, 0.35], ["0vw", "60vw"], { ease });
+  const sideOpacity = useTransform(scrollYProgress, [0.02, 0.25], [1, 0]);
+  const dark = useTransform(scrollYProgress, [0.3, 0.45], [0, 0.55]);
+  const textY = useTransform(scrollYProgress, [0.36, 0.62], ["100svh", "0svh"]);
+  const textOpacity = useTransform(scrollYProgress, [0.36, 0.5], [0, 1]);
+  const controlsOpacity = useTransform(scrollYProgress, [0.6, 0.7], [0, 1]);
 
   const nextSlide = () =>
     setActiveSlide((prev) => Math.min(prev + 1, allSlides.length - 1));
@@ -127,33 +125,21 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
     <section
       id="about"
       ref={stickyRef}
-      className="relative -mx-4 mt-[100px] h-[500vh] md:-mx-6 lg:mt-[200px]"
+      className="relative -mx-4 mt-0 h-[300svh] md:h-[420svh] md:-mx-6 lg:mt-[120px]"
     >
-      <div className="sticky top-0 h-screen overflow-hidden bg-sand">
+      <div className="sticky top-0 h-[100svh] overflow-hidden bg-sand">
         <motion.div
           onPanEnd={(_, info) => {
             if (info.offset.x < -40) nextSlide();
             else if (info.offset.x > 40) prevSlide();
           }}
           style={{ touchAction: "pan-y" }}
-          className="flex h-full w-full items-center gap-4"
+          className="absolute inset-0"
         >
-          <div className="flex min-w-0 flex-1 justify-end gap-4">
-            {allSlides.slice(0, activeSlide).map((slide) => (
-              <motion.img
-                key={slide.id}
-                src={slide.src}
-                alt={slide.caption}
-                draggable={false}
-                style={{ opacity: sideOpacity }}
-                className="h-[40vh] w-[30vw] shrink-0 object-cover md:h-[50vh]"
-              />
-            ))}
-          </div>
           <motion.div
-            style={{ width: centerW, height: centerH }}
-            className="relative shrink-0 cursor-pointer overflow-hidden"
+            style={{ clipPath: clip, willChange: "clip-path" }}
             onClick={() => carouselActive && handleOpenGallery()}
+            className="absolute inset-0 cursor-pointer"
           >
             <img
               src={allSlides[activeSlide].src}
@@ -166,18 +152,34 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
               className="absolute inset-0 bg-black"
             />
           </motion.div>
-          <div className="flex min-w-0 flex-1 justify-start gap-4">
-            {allSlides.slice(activeSlide + 1).map((slide) => (
-              <motion.img
+          <motion.div
+            style={{ x: leftX, y: "-50%", top: "50%", opacity: sideOpacity, right: `calc(100% - ${insetX} + 1rem)`, willChange: "transform, opacity" }}
+            className="pointer-events-none absolute flex gap-4"
+          >
+            {allSlides.slice(0, activeSlide).map((slide) => (
+              <img
                 key={slide.id}
                 src={slide.src}
                 alt={slide.caption}
                 draggable={false}
-                style={{ opacity: sideOpacity }}
-                className="h-[40vh] w-[30vw] shrink-0 object-cover md:h-[50vh]"
+                className="h-[40svh] w-[30vw] shrink-0 object-cover md:h-[50svh]"
               />
             ))}
-          </div>
+          </motion.div>
+          <motion.div
+            style={{ x: rightX, y: "-50%", top: "50%", opacity: sideOpacity, left: `calc(100% - ${insetX} + 1rem)`, willChange: "transform, opacity" }}
+            className="pointer-events-none absolute flex gap-4"
+          >
+            {allSlides.slice(activeSlide + 1).map((slide) => (
+              <img
+                key={slide.id}
+                src={slide.src}
+                alt={slide.caption}
+                draggable={false}
+                className="h-[40svh] w-[30vw] shrink-0 object-cover md:h-[50svh]"
+              />
+            ))}
+          </motion.div>
         </motion.div>
 
         <motion.div
