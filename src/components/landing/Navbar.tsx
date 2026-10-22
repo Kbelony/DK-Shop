@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { MenuOverlay } from "./MenuOverlay";
+import { scrollToId } from "@/lib/smoothScroll";
 
 interface NavbarProps {
   translucent?: boolean;
@@ -10,74 +11,49 @@ interface NavbarProps {
 export function Navbar({ translucent = false }: NavbarProps) {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const textColor = translucent ? "text-white" : "text-deep";
-  const subText = translucent ? "text-white/70" : "text-deep/60";
+  const light = translucent;
+
+  const goHome = () => {
+    if (window.location.pathname === "/") scrollToId("top");
+    else navigate("/");
+  };
 
   return (
     <>
-      <header
-        className={clsx(
-          "fixed left-0 right-0 top-0 z-50 transition-all",
-          translucent ? "bg-transparent" : "bg-sand/95 backdrop-blur"
-        )}
-      >
-        <div className="mx-auto flex w-full max-w-full items-center justify-between gap-2 sm:gap-4 px-4 py-5 sm:px-6 lg:px-10">
+      <header className="fixed left-0 right-0 top-0 z-50">
+        <div className="flex items-center justify-between px-4 py-4 md:px-6">
           <button
-            onClick={() => navigate("/")}
-            className="space-y-1 text-left cursor-pointer"
+            onClick={goHome}
+            className={clsx(
+              "font-display text-[26px] leading-6 tracking-[-0.04em]",
+              light ? "text-white" : "text-ember"
+            )}
             data-cursor="focus"
             aria-label="Retour à l'accueil"
           >
-            <p
-              className={clsx(
-                "font-heading text-sm uppercase tracking-[0.4em]",
-                translucent ? "text-ember/80" : "text-ember"
-              )}
-            >
-              Bakeat
-            </p>
-            <p className={clsx("text-xs uppercase tracking-[0.4em]", subText)}>
-              Handmade ovens &amp; crumbs since 1998
-            </p>
+            Bakeat
           </button>
 
           <div
             className={clsx(
-              "hidden items-center gap-6 text-xs uppercase tracking-[0.35em] sm:flex",
-              subText
+              "font-dm flex items-center gap-10 text-base font-bold",
+              light ? "text-white" : "text-deep"
             )}
           >
-            <span>London, UK</span>
-            <span>Open 8 — 4</span>
+            <span className="hidden sm:inline">London, UK</span>
+            <button
+              onClick={() => setOpen(true)}
+              className="flex items-center gap-3"
+              data-cursor="focus"
+              aria-label="Open navigation menu"
+            >
+              Menu
+              <span className="relative block h-[7px] w-[18px]">
+                <span className="absolute inset-x-0 top-0 h-[1.5px] bg-current" />
+                <span className="absolute inset-x-0 bottom-0 h-[1.5px] bg-current" />
+              </span>
+            </button>
           </div>
-
-          <button
-            onClick={() => setOpen(true)}
-            className={clsx(
-              "flex items-center gap-2 sm:gap-3 rounded-full border px-3 sm:px-5 py-1.5 sm:py-2 font-heading text-sm sm:text-base transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 flex-shrink-0",
-              translucent
-                ? "border-white/40 text-white hover:border-white"
-                : "border-deep/30 text-deep hover:border-deep/60"
-            )}
-            data-cursor="focus"
-            aria-label="Open navigation menu"
-          >
-            Menu
-            <span className="relative h-3 w-4">
-              <span
-                className={clsx(
-                  "absolute inset-x-0 top-0 h-[2px]",
-                  textColor === "text-white" ? "bg-white" : "bg-deep"
-                )}
-              />
-              <span
-                className={clsx(
-                  "absolute inset-x-0 bottom-0 h-[2px]",
-                  textColor === "text-white" ? "bg-white" : "bg-deep"
-                )}
-              />
-            </span>
-          </button>
         </div>
       </header>
 

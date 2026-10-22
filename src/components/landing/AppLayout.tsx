@@ -4,12 +4,11 @@ interface AppLayoutProps {
   children: ReactNode;
 }
 
+// 24px side margins, like the reference. Sections own their vertical spacing.
 export function AppLayout({ children }: AppLayoutProps) {
   return (
     <div className="min-h-screen bg-sand text-deep font-body">
-      <div className="mx-auto w-full px-4 sm:px-6 lg:px-10 py-6 sm:py-10 space-y-20 lg:space-y-28">
-        {children}
-      </div>
+      <div className="mx-auto w-full px-4 md:px-6">{children}</div>
     </div>
   );
 }

@@ -1,24 +1,32 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { scrollToId } from "@/lib/smoothScroll";
 
 interface MenuOverlayProps {
   open: boolean;
   onClose: () => void;
 }
 
-const menuEntries = ["Home", "Bakes", "About", "News", "Contact"];
+// label -> section id on the landing page
+const menuEntries = [
+  { label: "Bakes", id: "bakes" },
+  { label: "About", id: "about" },
+  { label: "News", id: "news" },
+  { label: "Contact", id: "contact" },
+];
 
 export function MenuOverlay({ open, onClose }: MenuOverlayProps) {
   const navigate = useNavigate();
 
-  const handleMenuClick = (entry: string) => {
-    if (entry === "Home") {
+  // Close first, then glide to the section with Lenis (like the anchors of the reference)
+  const go = (id: string) => {
+    onClose();
+    const run = () => window.setTimeout(() => scrollToId(id), 250);
+    if (window.location.pathname !== "/") {
       navigate("/");
-      onClose();
+      window.setTimeout(() => scrollToId(id), 500);
     } else {
-      // Pour les autres entrées, on peut ajouter la logique plus tard
-      onClose();
+      run();
     }
   };
 
@@ -29,25 +37,22 @@ export function MenuOverlay({ open, onClose }: MenuOverlayProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[90] bg-sand/95 backdrop-blur-sm px-6 sm:px-10 lg:px-20 py-8"
+          className="fixed inset-0 z-[90] bg-sand px-4 py-4 md:px-6"
         >
-          <div className="flex items-start justify-between text-sm uppercase tracking-wide">
+          <div className="flex items-center justify-between">
             <button
-              onClick={() => {
-                navigate("/");
-                onClose();
-              }}
-              className="font-heading text-lg text-ember cursor-pointer"
+              onClick={() => go("top")}
+              className="font-display text-[26px] leading-6 tracking-[-0.04em] text-ember"
               data-cursor="focus"
               aria-label="Retour à l'accueil"
             >
               Bakeat
             </button>
-            <div className="flex items-center gap-6 text-deep/70">
-              <span>London, UK</span>
+            <div className="font-dm flex items-center gap-10 text-base font-bold text-deep">
+              <span className="hidden sm:inline">London, UK</span>
               <button
                 onClick={onClose}
-                className="flex items-center gap-2 font-heading text-base text-deep data-[cursor='focus']"
+                className="flex items-center gap-2"
                 data-cursor="focus"
               >
                 Close <span className="text-2xl leading-none">×</span>
@@ -55,39 +60,32 @@ export function MenuOverlay({ open, onClose }: MenuOverlayProps) {
             </div>
           </div>
 
-          <div className="mt-16 grid gap-10 lg:grid-cols-[1fr_auto]">
-            <div className="space-y-4">
+          <div className="mt-24 grid gap-12 lg:grid-cols-[1fr_auto]">
+            <nav className="space-y-2">
               {menuEntries.map((entry, index) => (
                 <motion.button
-                  key={entry}
-                  onClick={() => handleMenuClick(entry)}
-                  className="block text-5xl sm:text-6xl font-heading text-deep leading-tight text-left w-full"
+                  key={entry.id}
+                  onClick={() => go(entry.id)}
+                  className="font-display block w-full text-left text-[56px] leading-[1] lg:text-[96px]"
                   data-cursor="focus"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.05 * index }}
                 >
-                  {entry}
+                  {entry.label}
                 </motion.button>
               ))}
-            </div>
-            <div className="space-y-6 text-right text-sm uppercase tracking-wide text-deep/60">
+            </nav>
+            <div className="font-dm space-y-6 text-base text-deep lg:text-right">
               <div>
-                <p className="text-deep">/Contact info</p>
-                <p className="text-base font-medium text-deep">hello@bakeat.com</p>
-                <p className="text-base font-medium text-deep">+44 20 1234 5678</p>
+                <p className="text-2xl font-bold">/Contact Info</p>
+                <p className="text-greyText">hello@bakeat.com</p>
+                <p className="text-greyText">+44 20 1234 5678</p>
               </div>
               <div>
-                <p className="text-deep">/Address</p>
-                <p>21 Bloomsbury Way, WC1A 2TH</p>
+                <p className="text-2xl font-bold">/Address</p>
+                <p className="text-greyText">21 Bloomsbury Way, WC1A 2TH</p>
               </div>
-              <Button
-                className="rounded-full bg-deep px-8 py-5 text-base font-heading tracking-wide"
-                onClick={onClose}
-                data-cursor="focus"
-              >
-                Book a visit
-              </Button>
             </div>
           </div>
         </motion.div>
@@ -95,4 +93,3 @@ export function MenuOverlay({ open, onClose }: MenuOverlayProps) {
     </AnimatePresence>
   );
 }
-
