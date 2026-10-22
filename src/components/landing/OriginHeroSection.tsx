@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import {
   AnimatePresence,
   motion,
+  type MotionValue,
   useMotionValueEvent,
   useScroll,
   useTransform,
@@ -39,6 +40,56 @@ const allSlides = [
 ];
 
 const INITIAL_SLIDE = Math.floor(allSlides.length / 2);
+
+/**
+ * The photo is always drawn at the "cover" size of the window it sits in, so
+ * it is never magnified in the small state; it only grows with the window.
+ */
+function SlideImage({
+  src,
+  alt,
+  scaleX,
+  scaleY,
+}: {
+  src: string;
+  alt: string;
+  scaleX: MotionValue<number>;
+  scaleY: MotionValue<number>;
+}) {
+  const dims = useRef({ w: 0, h: 0 });
+  const [loaded, setLoaded] = useState(false);
+  const scale = useTransform([scaleX, scaleY], ([sx, sy]: number[]) => {
+    if (!dims.current.w) return 1;
+    const W = document.documentElement.clientWidth;
+    const H = window.innerHeight;
+    return Math.max((W * sx) / dims.current.w, (H * sy) / dims.current.h);
+  });
+  return (
+    <motion.img
+      src={src}
+      alt={alt}
+      draggable={false}
+      onLoad={(e) => {
+        dims.current = {
+          w: e.currentTarget.naturalWidth,
+          h: e.currentTarget.naturalHeight,
+        };
+        setLoaded(true);
+        scaleX.set(scaleX.get() + 1e-6);
+      }}
+      style={{
+        scale,
+        x: "-50%",
+        y: "-50%",
+        width: dims.current.w || undefined,
+        height: dims.current.h || undefined,
+        opacity: loaded ? 1 : 0,
+        willChange: "transform",
+      }}
+      className="absolute left-1/2 top-1/2 max-w-none"
+    />
+  );
+}
 
 interface OriginHeroSectionProps {
   onOverlayToggle?: (isTransparent: boolean) => void;
@@ -155,11 +206,8 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
               className="absolute inset-0"
             >
               <AnimatePresence initial={false} custom={{ d: dir, full: carouselActive }}>
-                <motion.img
+                <motion.div
                   key={allSlides[activeSlide].id}
-                  src={allSlides[activeSlide].src}
-                  alt={allSlides[activeSlide].caption}
-                  draggable={false}
                   custom={{ d: dir, full: carouselActive }}
                   variants={{
                     enter: ({ d }: { d: number }) => ({ x: `${d * 100}%`, opacity: 1 }),
@@ -174,8 +222,15 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
                   exit="exit"
                   transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   style={{ willChange: "transform" }}
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
+                  className="absolute inset-0"
+                >
+                  <SlideImage
+                    src={allSlides[activeSlide].src}
+                    alt={allSlides[activeSlide].caption}
+                    scaleX={scaleX}
+                    scaleY={scaleY}
+                  />
+                </motion.div>
               </AnimatePresence>
               <motion.div
                 style={{ opacity: dark }}
