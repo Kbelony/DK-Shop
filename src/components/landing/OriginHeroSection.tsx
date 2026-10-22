@@ -1,3 +1,4 @@
+import { photo, photoSrcSet } from "@/lib/img";
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useRef, useState, useEffect } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -71,7 +72,9 @@ function SlideImage({
   return (
     <motion.img
       ref={ref}
-      src={src}
+      src={photo(src)}
+      srcSet={photoSrcSet(src)}
+      sizes="100vw"
       alt={alt}
       draggable={false}
       onLoad={(e) => {

@@ -36,6 +36,9 @@ export function HeroIntroSection() {
         <SkeletonImage
           src="https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/001_1U1A0815_DEBORA.jpg?raw=true"
           alt="Model wearing a handmade piece"
+          loading="eager"
+          fetchPriority="high"
+          sizes="(min-width: 1024px) 90vw, 100vw"
           wrapperClassName="h-[218px] w-full sm:h-[400px] lg:h-[602px]"
           className="h-full w-full object-cover"
         />

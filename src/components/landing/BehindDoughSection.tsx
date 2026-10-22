@@ -1,3 +1,4 @@
+import { photo } from "@/lib/img";
 import { SkeletonImage } from "@/components/ui/skeleton-image";
 import { useEffect, useRef, useState } from "react";
 
@@ -119,9 +120,10 @@ export function BehindDoughSection() {
             {steps.map((step, index) => (
               <img
                 key={step.title}
-                src={step.image}
+                src={photo(step.image)}
                 alt={step.title}
-                loading="eager"
+                loading="lazy"
+                decoding="async"
                 className={`max-h-[calc(100vh-136px)] w-full object-contain object-top transition-opacity duration-500 ${
                   index === activeIndex
                     ? "relative opacity-100"

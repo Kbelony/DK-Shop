@@ -1,3 +1,4 @@
+import { photo } from "@/lib/img";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useRef } from "react";
@@ -88,7 +89,7 @@ export function ImageLightbox({
           <AnimatePresence initial={false} custom={dir} mode="popLayout">
             <motion.img
               key={currentIndex}
-              src={images[currentIndex].src}
+              src={photo(images[currentIndex].src)}
               alt={images[currentIndex].alt}
               draggable={false}
               custom={dir}

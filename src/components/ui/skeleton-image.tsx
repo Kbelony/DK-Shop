@@ -1,3 +1,4 @@
+import { photo, photoSrcSet } from "@/lib/img";
 import { useEffect, useRef, useState, type ImgHTMLAttributes } from "react";
 
 interface SkeletonImageProps extends ImgHTMLAttributes<HTMLImageElement> {
@@ -13,6 +14,9 @@ export function SkeletonImage({
   placeholderClassName = "",
   className = "",
   onLoad,
+  src,
+  sizes = "100vw",
+  loading = "lazy",
   ...props
 }: SkeletonImageProps) {
   const [loaded, setLoaded] = useState(false);
@@ -35,6 +39,11 @@ export function SkeletonImage({
       <img
         ref={ref}
         {...props}
+        src={src ? photo(src, 800) : src}
+        srcSet={src ? photoSrcSet(src) : undefined}
+        sizes={sizes}
+        loading={loading}
+        decoding="async"
         onLoad={(e) => {
           setLoaded(true);
           onLoad?.(e);

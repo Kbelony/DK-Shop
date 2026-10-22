@@ -141,6 +141,7 @@ export function GalleryPage() {
                     >
                       <SkeletonImage
                         src={pairImage.src}
+                        sizes="(min-width: 1024px) 33vw, 50vw"
                         alt={pairImage.alt}
                         wrapperClassName="w-full"
                         placeholderClassName={
@@ -175,6 +176,7 @@ export function GalleryPage() {
                 >
                   <SkeletonImage
                     src={image.src}
+                    sizes="(min-width: 1024px) 33vw, 50vw"
                     alt={image.alt}
                     wrapperClassName="w-full"
                     placeholderClassName="aspect-[3/2]"
