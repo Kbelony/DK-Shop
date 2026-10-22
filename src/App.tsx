@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { ThemeProvider } from "./components/ui/theme-provider";
 import { AppLayout } from "./components/landing/AppLayout";
@@ -6,13 +6,21 @@ import { Navbar } from "./components/landing/Navbar";
 import { HeroIntroSection } from "./components/landing/HeroIntroSection";
 import { BehindDoughSection } from "./components/landing/BehindDoughSection";
 import { CreatorIntroSection } from "./components/landing/CreatorIntroSection";
-import { NewsListPage, NewsArticlePage } from "./components/news/NewsPages";
 import { OriginHeroSection } from "./components/landing/OriginHeroSection";
 import { NewsSection } from "./components/landing/NewsSection";
 import { Footer } from "./components/landing/Footer";
 import { SmoothScrollProvider } from "./components/landing/SmoothScrollProvider";
 import { CustomCursor } from "./components/landing/CustomCursor";
-import { GalleryPage } from "./components/gallery/GalleryPage";
+
+const GalleryPage = lazy(() =>
+  import("./components/gallery/GalleryPage").then((m) => ({ default: m.GalleryPage })),
+);
+const NewsListPage = lazy(() =>
+  import("./components/news/NewsPages").then((m) => ({ default: m.NewsListPage })),
+);
+const NewsArticlePage = lazy(() =>
+  import("./components/news/NewsPages").then((m) => ({ default: m.NewsArticlePage })),
+);
 
 function LandingPage({
   onOverlayToggle,
@@ -49,6 +57,7 @@ function App() {
       <SmoothScrollProvider>
         <div className="min-h-screen bg-sand text-deep font-body">
           <Navbar translucent={originOverlay} />
+          <Suspense fallback={null}>
           <Routes>
             <Route
               path="/"
@@ -58,6 +67,7 @@ function App() {
             <Route path="/news" element={<NewsListPage />} />
             <Route path="/news/:slug" element={<NewsArticlePage />} />
           </Routes>
+          </Suspense>
           <CustomCursor />
         </div>
       </SmoothScrollProvider>
