@@ -104,7 +104,7 @@ export function BehindDoughSection() {
                 <SkeletonImage
                   src={step.image}
                   alt={step.title}
-                  wrapperClassName="aspect-[1462/2600] w-full bg-[#efe6d3] sm:mx-auto sm:max-w-[420px]"
+                  wrapperClassName="aspect-[1462/2600] w-full bg-sand sm:mx-auto sm:max-w-[420px]"
                   className="h-full w-full object-contain"
                 />
               </div>
@@ -117,7 +117,7 @@ export function BehindDoughSection() {
               of the first photo, 1462x2600) and is shown whole (contain), so
               they all have one size and nothing is cropped.
               It stays put and swaps when the next title reaches the trigger. */}
-          <div className="sticky top-[104px] mx-auto aspect-[1462/2600] h-[calc(100vh-136px)] max-w-full bg-[#efe6d3]">
+          <div className="sticky top-[104px] mx-auto aspect-[1462/2600] h-[calc(100vh-136px)] max-w-full bg-sand">
             {steps.map((step, index) => (
               <img
                 key={step.title}
