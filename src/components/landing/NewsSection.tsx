@@ -7,7 +7,7 @@ const articles = news;
 
 export function NewsSection() {
   return (
-    <section id="news" className="pt-[100px] lg:pt-[200px]">
+    <section id="news" className="pt-[64px] lg:pt-[96px]">
       <div className="grid gap-6 lg:grid-cols-[1fr_368px] lg:items-start lg:gap-0">
         <h2 className="font-display text-[56px] leading-[1] lg:text-[128px]">
           News
@@ -41,12 +41,14 @@ export function NewsSection() {
               data-cursor="focus"
             >
             <div className="overflow-hidden">
-              <SkeletonImage
-                src={article.image}
-                alt={article.title}
-                wrapperClassName="aspect-[437/292] w-full"
-                className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
-              />
+              <div className="transform-gpu transition-transform duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform group-hover:scale-[1.04]">
+                <SkeletonImage
+                  src={article.image}
+                  alt={article.title}
+                  wrapperClassName="aspect-[437/292] w-full"
+                  className="h-full w-full object-cover"
+                />
+              </div>
             </div>
             <h3 className="font-display mt-6 text-xl leading-6">
               {article.title}

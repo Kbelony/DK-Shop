@@ -79,12 +79,14 @@ export function NewsListPage() {
           >
             <Link to={`/news/${item.slug}`} className="group block" data-cursor="focus">
               <div className="overflow-hidden">
-                <SkeletonImage
-                  src={item.image}
-                  alt={item.title}
-                  wrapperClassName="aspect-[437/292] w-full"
-                  className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                />
+                <div className="transform-gpu transition-transform duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform group-hover:scale-[1.04]">
+                  <SkeletonImage
+                    src={item.image}
+                    alt={item.title}
+                    wrapperClassName="aspect-[437/292] w-full"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
               </div>
               <h2 className="font-display mt-6 text-xl leading-6">{item.title}</h2>
               <p className="font-dm mt-2 text-base leading-[1.2] text-greyText">
