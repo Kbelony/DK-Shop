@@ -104,8 +104,8 @@ export function BehindDoughSection() {
                 <SkeletonImage
                   src={step.image}
                   alt={step.title}
-                  wrapperClassName="aspect-[1462/2600] w-full sm:mx-auto sm:max-w-[420px]"
-                  className="h-full w-full object-cover"
+                  wrapperClassName="aspect-[1462/2600] w-full bg-[#efe6d3] sm:mx-auto sm:max-w-[420px]"
+                  className="h-full w-full object-contain"
                 />
               </div>
             </article>
@@ -114,16 +114,17 @@ export function BehindDoughSection() {
 
         <div className="relative hidden pl-[112px] lg:block">
           {/* Sticky picture. Every photo uses the same portrait box (the ratio
-              of the first photo, 1462x2600), so they all show at one size.
+              of the first photo, 1462x2600) and is shown whole (contain), so
+              they all have one size and nothing is cropped.
               It stays put and swaps when the next title reaches the trigger. */}
-          <div className="sticky top-[104px] mx-auto aspect-[1462/2600] h-[calc(100vh-136px)] max-w-full">
+          <div className="sticky top-[104px] mx-auto aspect-[1462/2600] h-[calc(100vh-136px)] max-w-full bg-[#efe6d3]">
             {steps.map((step, index) => (
               <img
                 key={step.title}
                 src={step.image}
                 alt={step.title}
                 loading="eager"
-                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
+                className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-500 ${
                   index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0"
                 }`}
               />

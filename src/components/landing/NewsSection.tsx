@@ -41,7 +41,13 @@ export function NewsSection() {
               data-cursor="focus"
             >
             <div className="overflow-hidden">
-              <div className="transform-gpu transition-transform duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform group-hover:scale-[1.04]">
+              <div
+                className="transform-gpu transition-transform will-change-transform group-hover:scale-[1.04]"
+                style={{
+                  transitionDuration: "1200ms",
+                  transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
+                }}
+              >
                 <SkeletonImage
                   src={article.image}
                   alt={article.title}
