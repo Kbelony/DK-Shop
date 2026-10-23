@@ -86,7 +86,7 @@ export function BehindDoughSection() {
             <article
               key={step.title}
               ref={(el) => (itemRefs.current[index] = el)}
-              className="pb-14 last:pb-6 lg:pb-[200px]"
+              className="pb-14 last:pb-6 lg:min-h-[600px] lg:pb-0 lg:last:pb-0"
             >
               <h3 className="font-display relative inline-block text-[56px] leading-[1] lg:text-[128px]">
                 {step.title}
@@ -104,7 +104,7 @@ export function BehindDoughSection() {
                 <SkeletonImage
                   src={step.image}
                   alt={step.title}
-                  wrapperClassName="h-[218px] w-full sm:h-[360px]"
+                  wrapperClassName="aspect-[1462/2600] w-full sm:mx-auto sm:max-w-[420px]"
                   className="h-full w-full object-cover"
                 />
               </div>
@@ -113,19 +113,18 @@ export function BehindDoughSection() {
         </div>
 
         <div className="relative hidden pl-[112px] lg:block">
-          {/* Sticky picture, full column width, natural proportions. It stays
-              put and swaps when the next title reaches the trigger line. */}
-          <div className="sticky top-[104px]">
+          {/* Sticky picture. Every photo uses the same portrait box (the ratio
+              of the first photo, 1462x2600), so they all show at one size.
+              It stays put and swaps when the next title reaches the trigger. */}
+          <div className="sticky top-[104px] mx-auto aspect-[1462/2600] h-[calc(100vh-136px)] max-w-full">
             {steps.map((step, index) => (
               <img
                 key={step.title}
                 src={step.image}
                 alt={step.title}
                 loading="eager"
-                className={`max-h-[calc(100vh-136px)] w-full object-contain object-top transition-opacity duration-500 ${
-                  index === activeIndex
-                    ? "relative opacity-100"
-                    : "pointer-events-none absolute left-0 top-0 opacity-0"
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
+                  index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0"
                 }`}
               />
             ))}
