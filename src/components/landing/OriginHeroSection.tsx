@@ -47,12 +47,21 @@ const INITIAL_SLIDE = Math.floor(staticSlides.length / 2);
  * The photo is always drawn at the "cover" size of the window it sits in, so
  * it is never magnified in the small state; it only grows with the window.
  */
+// Where the face sits in the photo (0 = top edge, 1 = bottom edge), for photos
+// whose face has to sit in the middle of the window instead of near the top.
+const FACE_Y: Record<string, number> = {
+  "gallery-4": 0.33, // Greg orange and black looks
+  "gallery-5": 0.35, // Profile look
+};
+
 function SlideImage({
+  faceY,
   src,
   alt,
   scaleX,
   scaleY,
 }: {
+  faceY?: number;
   src: string;
   alt: string;
   scaleX: MotionValue<number>;
@@ -81,6 +90,10 @@ function SlideImage({
     const { w, h } = dims.current;
     const overflow = h * c.s - c.H * c.sy;
     if (overflow <= 0 || h < w * 1.1) return "-50%";
+    if (faceY !== undefined) {
+      const want = (0.5 - faceY) * h * c.s; // moves the face to the window centre
+      return `calc(-50% + ${Math.max(-overflow / 2, Math.min(overflow / 2, want))}px)`;
+    }
     const focus = 0.1; // 0 = top edge, 0.5 = centre
     return `calc(-50% + ${(0.5 - focus) * overflow}px)`;
   });
@@ -185,6 +198,7 @@ function Slide({
         >
           <SlideImage
             key={slide.src}
+            faceY={FACE_Y[slide.id]}
             src={slide.src}
             alt={slide.caption}
             scaleX={scaleX}
