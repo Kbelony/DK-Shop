@@ -11,8 +11,9 @@ import {
   useTransform,
 } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { fetchAlbums, photoUrl } from "@/services/googlePhotos";
 
-const allSlides = [
+const staticSlides = [
   {
     id: "gallery-1",
     src: "https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=1400&q=80",
@@ -40,7 +41,7 @@ const allSlides = [
   },
 ];
 
-const INITIAL_SLIDE = Math.floor(allSlides.length / 2);
+const INITIAL_SLIDE = Math.floor(staticSlides.length / 2);
 
 /**
  * The photo is always drawn at the "cover" size of the window it sits in, so
@@ -183,6 +184,24 @@ interface OriginHeroSectionProps {
 
 export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
   const navigate = useNavigate();
+  // Static photos first; swapped for the first photo of each shared album when they load.
+  const [allSlides, setAllSlides] = useState(staticSlides);
+  useEffect(() => {
+    let cancelled = false;
+    fetchAlbums().then((albums) => {
+      if (cancelled || !albums) return;
+      setAllSlides(
+        albums.map((a) => ({
+          id: a.id,
+          src: photoUrl(a.images[0].src.split("=")[0], 1600),
+          caption: a.title,
+        }))
+      );
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
   const stickyRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef(false);
   const carouselRef = useRef(false);
