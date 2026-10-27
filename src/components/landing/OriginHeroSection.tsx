@@ -140,6 +140,12 @@ function Slide({
   const down = useRef<{ x: number; y: number; t: number } | null>(null);
   const d = useMotionValue(offset);
   useEffect(() => {
+    // A slide that wraps around from one end to the other jumps while it is
+    // off screen, so the loop looks endless.
+    if (Math.abs(offset - d.get()) > 1.5) {
+      d.set(offset);
+      return;
+    }
     const c = animate(d, offset, { duration: 0.5, ease: [0.22, 1, 0.36, 1] });
     return () => c.stop();
   }, [offset, d]);
@@ -227,7 +233,16 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
   });
 
   const [carouselActive, setCarouselActive] = useState(false);
-  const [activeSlide, setActiveSlide] = useState(INITIAL_SLIDE); // Start with middle slide
+  // Unbounded position: the carousel loops, so it can keep going either way.
+  const [pos, setPos] = useState(INITIAL_SLIDE); // Start with middle slide
+  const count = allSlides.length;
+  const activeSlide = ((pos % count) + count) % count;
+  const slideOffset = (i: number) => {
+    const half = count / 2;
+    let o = (((i - pos) % count) + count) % count;
+    if (o >= half) o -= count;
+    return o;
+  };
   const [mobile, setMobile] = useState(false);
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)");
@@ -272,10 +287,10 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
   const controlsOpacity = useTransform(scrollYProgress, [0.75, 0.88], [0, 1]);
 
   const nextSlide = () => {
-    setActiveSlide((prev) => Math.min(prev + 1, allSlides.length - 1));
+    setPos((prev) => prev + 1);
   };
   const prevSlide = () => {
-    setActiveSlide((prev) => Math.max(prev - 1, 0));
+    setPos((prev) => prev - 1);
   };
 
   const handleOpenGallery = () => {
@@ -313,7 +328,7 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
             <Slide
               key={slide.id}
               slide={slide}
-              offset={i - activeSlide}
+              offset={slideOffset(i)}
               scaleX={scaleX}
               scaleY={scaleY}
               invX={invX}
@@ -331,7 +346,7 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
         >
           <div className="max-w-[672px]">
             <h2 className="font-display text-[56px] leading-[1] lg:text-[128px]">
-              The origin
+              The gallery
             </h2>
             <p className="font-dm mt-6 text-xl font-bold leading-[1.2] lg:text-2xl">
               {allSlides[activeSlide].caption}
