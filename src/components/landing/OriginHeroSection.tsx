@@ -61,13 +61,28 @@ function SlideImage({
   const dims = useRef({ w: 0, h: 0 });
   const ref = useRef<HTMLImageElement>(null);
   const [loaded, setLoaded] = useState(false);
-  const scale = useTransform([scaleX, scaleY], ([sx, sy]: number[]) => {
+  const coverScale = (sx: number, sy: number) => {
     const box = ref.current?.closest<HTMLElement>("[data-origin-sticky]");
-    if (!dims.current.w || !box) return 1;
+    if (!dims.current.w || !box) return null;
     const W = box.offsetWidth;
     const H = box.offsetHeight;
     // 1.02: a hair larger than "cover" so rounding never leaves a gap
-    return 1.02 * Math.max((W * sx) / dims.current.w, (H * sy) / dims.current.h);
+    const s = 1.02 * Math.max((W * sx) / dims.current.w, (H * sy) / dims.current.h);
+    return { s, H, sy };
+  };
+  const scale = useTransform([scaleX, scaleY], ([sx, sy]: number[]) => {
+    return coverScale(sx, sy)?.s ?? 1;
+  });
+  // Tall photos in a wide window lose their top and bottom. People are near the
+  // top of a portrait photo, so keep the top of the photo and crop the bottom.
+  const y = useTransform([scaleX, scaleY], ([sx, sy]: number[]) => {
+    const c = coverScale(sx, sy);
+    if (!c) return "-50%";
+    const { w, h } = dims.current;
+    const overflow = h * c.s - c.H * c.sy;
+    if (overflow <= 0 || h < w * 1.1) return "-50%";
+    const focus = 0.1; // 0 = top edge, 0.5 = centre
+    return `calc(-50% + ${(0.5 - focus) * overflow}px)`;
   });
   return (
     <motion.img
@@ -86,7 +101,7 @@ function SlideImage({
       style={{
         scale,
         x: "-50%",
-        y: "-50%",
+        y,
         width: dims.current.w || undefined,
         height: dims.current.h || undefined,
         opacity: loaded ? 1 : 0,
@@ -163,6 +178,7 @@ function Slide({
           className="absolute inset-0"
         >
           <SlideImage
+            key={slide.src}
             src={slide.src}
             alt={slide.caption}
             scaleX={scaleX}
