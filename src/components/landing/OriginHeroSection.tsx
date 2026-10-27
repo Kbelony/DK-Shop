@@ -356,10 +356,10 @@ export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
 
         <motion.div
           style={{ y: textY, opacity: textOpacity }}
-          className="pointer-events-none absolute inset-0 z-10 flex items-center px-4 text-sand md:px-6 lg:pl-[744px]"
+          className="pointer-events-none absolute inset-0 z-10 flex items-center px-4 text-sand md:px-6 lg:items-end lg:pb-28"
         >
           <div className="max-w-[672px]">
-            <h2 className="font-display text-[56px] leading-[1] lg:text-[128px]">
+            <h2 className="font-display text-[56px] leading-[1] lg:whitespace-nowrap lg:text-[128px]">
               The gallery
             </h2>
             <p className="font-dm mt-6 text-xl font-bold leading-[1.2] lg:text-2xl">
