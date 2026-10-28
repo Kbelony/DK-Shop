@@ -54,14 +54,29 @@ const FACE_Y: Record<string, number> = {
   "gallery-5": 0.35, // Profile look
 };
 
+// Where the garment sits in each photo (0 = top edge, 1 = bottom edge). On
+// large screens the window is centred on this point so the clothes show, not
+// the face. Photos not listed use CLOTHES_Y_DEFAULT.
+const CLOTHES_Y_DEFAULT = 0.58;
+const CLOTHES_Y: Record<string, number> = {
+  "gallery-1": 0.6, // Monica: pink dress, crouching
+  "gallery-2": 0.5, // Orange and black looks: orange panel and skirt
+  "gallery-3": 0.62, // Blue dress
+  "gallery-4": 0.62, // Greg orange and black looks: jacket
+  "gallery-5": 0.7, // Profile look: green tiered dress
+  "gallery-6": 0.76, // Business looks: denim jacket, below the necklaces
+};
+
 function SlideImage({
   faceY,
+  clothesY,
   src,
   alt,
   scaleX,
   scaleY,
 }: {
   faceY?: number;
+  clothesY?: number;
   src: string;
   alt: string;
   scaleX: MotionValue<number>;
@@ -103,11 +118,12 @@ function SlideImage({
     const { w, h } = dims.current;
     const overflow = h * c.s - c.H * c.sy;
     if (overflow <= 0 || h < w * 1.1) return "-50%";
-    if (faceY !== undefined && !wide.current) {
-      const want = (0.5 - faceY) * h * c.s; // moves the face to the window centre
+    const centre = wide.current ? clothesY : faceY;
+    if (centre !== undefined) {
+      const want = (0.5 - centre) * h * c.s; // moves that point to the window centre
       return `calc(-50% + ${Math.max(-overflow / 2, Math.min(overflow / 2, want))}px)`;
     }
-    const focus = wide.current ? 0.58 : 0.1; // 0 = top edge, 0.5 = centre
+    const focus = 0.1; // 0 = top edge, 0.5 = centre
     return `calc(-50% + ${(0.5 - focus) * overflow}px)`;
   });
   return (
@@ -212,6 +228,7 @@ function Slide({
           <SlideImage
             key={slide.src}
             faceY={FACE_Y[slide.id]}
+            clothesY={CLOTHES_Y[slide.id] ?? CLOTHES_Y_DEFAULT}
             src={slide.src}
             alt={slide.caption}
             scaleX={scaleX}
