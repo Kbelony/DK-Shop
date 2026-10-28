@@ -70,6 +70,19 @@ function SlideImage({
   const dims = useRef({ w: 0, h: 0 });
   const ref = useRef<HTMLImageElement>(null);
   const [loaded, setLoaded] = useState(false);
+  // On large screens the window is wide and the photo is cropped top and
+  // bottom: show the clothes (the middle of the photo), not the face.
+  const wide = useRef(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const update = () => {
+      wide.current = mq.matches;
+      scaleX.set(scaleX.get() + 1e-6);
+    };
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, [scaleX]);
   const coverScale = (sx: number, sy: number) => {
     const box = ref.current?.closest<HTMLElement>("[data-origin-sticky]");
     if (!dims.current.w || !box) return null;
@@ -90,11 +103,11 @@ function SlideImage({
     const { w, h } = dims.current;
     const overflow = h * c.s - c.H * c.sy;
     if (overflow <= 0 || h < w * 1.1) return "-50%";
-    if (faceY !== undefined) {
+    if (faceY !== undefined && !wide.current) {
       const want = (0.5 - faceY) * h * c.s; // moves the face to the window centre
       return `calc(-50% + ${Math.max(-overflow / 2, Math.min(overflow / 2, want))}px)`;
     }
-    const focus = 0.1; // 0 = top edge, 0.5 = centre
+    const focus = wide.current ? 0.58 : 0.1; // 0 = top edge, 0.5 = centre
     return `calc(-50% + ${(0.5 - focus) * overflow}px)`;
   });
   return (
