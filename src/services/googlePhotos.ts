@@ -16,11 +16,37 @@ export type Gallery = {
 type AlbumPhoto = { src: string; width: number; height: number };
 type AlbumResponse = {
   albums: { id: string; title: string; images: AlbumPhoto[] }[];
+  slots?: Record<string, AlbumPhoto>;
 };
 
 /** Google serves any size from the same base URL: add =w<width>. */
 export function photoUrl(base: string, width: number) {
   return base.includes("=") ? base : `${base}=w${width}`;
+}
+
+let responsePromise: Promise<AlbumResponse | null> | null = null;
+
+function fetchResponse(): Promise<AlbumResponse | null> {
+  if (!responsePromise) {
+    responsePromise = fetch("/api/albums")
+      .then((res) => (res.ok ? (res.json() as Promise<AlbumResponse>) : null))
+      .catch(() => null);
+  }
+  return responsePromise;
+}
+
+/**
+ * First photo of the albums named Hero, Dresses, Jackets and Pants, by slot
+ * name in lower case. Resolves to null when nothing can be read.
+ */
+export async function fetchSlots(): Promise<Record<string, string> | null> {
+  const data = await fetchResponse();
+  if (!data?.slots) return null;
+  const out: Record<string, string> = {};
+  for (const [name, img] of Object.entries(data.slots)) {
+    if (img?.src) out[name] = photoUrl(img.src, 1600);
+  }
+  return Object.keys(out).length ? out : null;
 }
 
 let albumsPromise: Promise<Gallery[] | null> | null = null;
@@ -32,8 +58,7 @@ let albumsPromise: Promise<Gallery[] | null> | null = null;
  */
 export function fetchAlbums(): Promise<Gallery[] | null> {
   if (!albumsPromise) {
-    albumsPromise = fetch("/api/albums")
-      .then((res) => (res.ok ? (res.json() as Promise<AlbumResponse>) : null))
+    albumsPromise = fetchResponse()
       .then((data) => {
         if (!data || !Array.isArray(data.albums) || data.albums.length === 0) return null;
         return data.albums.map((album) => ({

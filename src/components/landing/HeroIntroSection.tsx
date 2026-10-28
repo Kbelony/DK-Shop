@@ -1,9 +1,14 @@
 import { SkeletonImage } from "@/components/ui/skeleton-image";
+import { useSlotImage } from "@/hooks/useSlotImage";
+
+const HERO_FALLBACK =
+  "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/001_1U1A0815_DEBORA.jpg?raw=true";
 import { motion } from "framer-motion";
 
 const ease = [0.23, 1, 0.32, 1] as const;
 
 export function HeroIntroSection() {
+  const heroSrc = useSlotImage("hero", HERO_FALLBACK);
   return (
     <section id="top" className="pt-[88px] md:pt-[100px]">
       <div className="grid gap-6 lg:grid-cols-[1fr_348px] lg:items-start lg:gap-0">
@@ -34,7 +39,7 @@ export function HeroIntroSection() {
         className="mt-10 overflow-hidden lg:mt-[64px]"
       >
         <SkeletonImage
-          src="https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/001_1U1A0815_DEBORA.jpg?raw=true"
+          src={heroSrc}
           alt="Model wearing a handmade piece"
           wrapperClassName="h-[218px] w-full sm:h-[400px] lg:h-[602px]"
           className="h-full w-full object-cover"

@@ -15,6 +15,11 @@ type AlbumConfig = { id: string; title?: string; url: string };
 type AlbumPhoto = { src: string; width: number; height: number; takenAt: number };
 type Album = { id: string; title: string; images: AlbumPhoto[] };
 
+// Albums with one of these names are not slides: their first photo fills one
+// fixed spot on the page (the big photo under the headline, and the Dresses,
+// Jackets and Pants photos in "Behind the seams").
+const SLOT_NAMES = ["hero", "dresses", "jackets", "pants"];
+
 const SHARE_HOST = "https://photos.google.com/share/";
 const PHOTO_HOST = "https://lh3.googleusercontent.com/";
 
@@ -84,13 +89,20 @@ export default async function handler(_req: VercelRequest, res: VercelResponse) 
     return;
   }
   const results = await Promise.allSettled(configs.map(loadAlbum));
-  const albums = results.flatMap((r) => (r.status === "fulfilled" ? [r.value] : []));
-  const failed = results.length - albums.length;
-  if (albums.length === 0) {
+  const loaded = results.flatMap((r) => (r.status === "fulfilled" ? [r.value] : []));
+  const failed = results.length - loaded.length;
+  const slots: Record<string, AlbumPhoto> = {};
+  const albums: Album[] = [];
+  for (const a of loaded) {
+    const name = a.title.trim().toLowerCase();
+    if (SLOT_NAMES.includes(name)) slots[name] = a.images[0];
+    else albums.push(a);
+  }
+  if (loaded.length === 0) {
     res.status(502).json({ error: "could not read any album" });
     return;
   }
-  // Cached at the edge for 10 minutes; stale copy served for a day while it refreshes.
-  res.setHeader("Cache-Control", "public, s-maxage=600, stale-while-revalidate=86400");
-  res.status(200).json({ albums, failed });
+  // Cached at the edge for 1 minute; stale copy served for a day while it refreshes.
+  res.setHeader("Cache-Control", "public, s-maxage=60, stale-while-revalidate=86400");
+  res.status(200).json({ albums, slots, failed });
 }

@@ -1,4 +1,5 @@
 import { SkeletonImage } from "@/components/ui/skeleton-image";
+import { useSlotImage } from "@/hooks/useSlotImage";
 import { useEffect, useRef, useState } from "react";
 
 const steps = [
@@ -29,6 +30,13 @@ const steps = [
 ];
 
 export function BehindDoughSection() {
+  // Photos of the Google Photos albums named Dresses, Jackets and Pants, when
+  // they load; the built-in photos otherwise.
+  const images = [
+    useSlotImage("dresses", steps[0].image),
+    useSlotImage("jackets", steps[1].image),
+    useSlotImage("pants", steps[2].image),
+  ];
   const [activeIndex, setActiveIndex] = useState(0);
   const itemRefs = useRef<(HTMLElement | null)[]>([]);
 
@@ -102,7 +110,7 @@ export function BehindDoughSection() {
               </p>
               <div className="mt-10 overflow-hidden lg:hidden">
                 <SkeletonImage
-                  src={step.image}
+                  src={images[index]}
                   alt={step.title}
                   wrapperClassName="aspect-[1462/2600] w-full bg-sand sm:mx-auto sm:max-w-[420px]"
                   className="h-full w-full object-contain"
@@ -121,7 +129,7 @@ export function BehindDoughSection() {
             {steps.map((step, index) => (
               <img
                 key={step.title}
-                src={step.image}
+                src={images[index]}
                 alt={step.title}
                 loading="eager"
                 className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-500 ${
