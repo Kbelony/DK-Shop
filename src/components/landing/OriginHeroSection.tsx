@@ -64,7 +64,7 @@ const CLOTHES_Y: Record<string, number> = {
   "gallery-3": 0.62, // Blue dress
   "gallery-4": 0.62, // Greg orange and black looks: jacket
   "gallery-5": 0.7, // Profile look: green tiered dress
-  "gallery-6": 0.76, // Business looks: denim jacket, below the necklaces
+  "gallery-6": 0.68, // Business looks: denim jacket and pink skirt
 };
 
 function SlideImage({
