@@ -216,7 +216,7 @@ function Slide({
           )
             onOpen();
         }}
-        className="img-shimmer pointer-events-auto absolute inset-0 cursor-pointer overflow-hidden"
+        className="img-shimmer pointer-events-auto absolute inset-0 cursor-pointer overflow-clip"
       >
         <motion.div
           style={{ scaleX: invX, scaleY: invY, willChange: "transform" }}
@@ -313,7 +313,7 @@ export function OriginHeroSection() {
       id="origin"
       className="relative -mx-4 mt-8 h-[85vh] min-h-[520px] md:-mx-6"
     >
-      <div data-origin-sticky className="absolute inset-0 overflow-hidden">
+      <div data-origin-sticky className="absolute inset-0 overflow-clip">
         <motion.div
           onPanEnd={(_, info) => {
             if (info.offset.x < -40) nextSlide();
