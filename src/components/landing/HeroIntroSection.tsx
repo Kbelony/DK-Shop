@@ -3,12 +3,16 @@ import { useSlotImage } from "@/hooks/useSlotImage";
 
 const HERO_FALLBACK =
   "https://github.com/Kbelony/DK-Shop/blob/main/src/assets/scss/001_1U1A0815_DEBORA.jpg?raw=true";
+import { useState } from "react";
 import { motion } from "framer-motion";
 
 const ease = [0.23, 1, 0.32, 1] as const;
 
 export function HeroIntroSection() {
   const heroSrc = useSlotImage("hero", HERO_FALLBACK);
+  // The photo fills a wide window. A tall (portrait) photo loses its top and
+  // bottom, so show it around the garment (below the face), not the middle.
+  const [tall, setTall] = useState(false);
   return (
     <section id="top" className="pt-[88px] md:pt-[100px]">
       <div className="grid gap-6 lg:grid-cols-[1fr_348px] lg:items-start lg:gap-0">
@@ -43,6 +47,10 @@ export function HeroIntroSection() {
           alt="Model wearing a handmade piece"
           wrapperClassName="h-[218px] w-full sm:h-[400px] lg:h-[602px]"
           className="h-full w-full object-cover"
+          style={{ objectPosition: tall ? "50% 66%" : undefined }}
+          onLoad={(e) =>
+            setTall(e.currentTarget.naturalHeight > e.currentTarget.naturalWidth)
+          }
         />
       </motion.div>
     </section>
