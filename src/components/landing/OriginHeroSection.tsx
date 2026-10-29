@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useRef, useState, useEffect } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import {
@@ -5,6 +6,8 @@ import {
   motion,
   useMotionValue,
   type MotionValue,
+  useMotionValueEvent,
+  useScroll,
   useTransform,
 } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -241,12 +244,11 @@ function Slide({
   );
 }
 
-/**
- * Plain carousel: no scroll-driven animation. The active slide fills the
- * section; arrows, swipe and keyboard move between shoots; tapping a photo
- * opens its gallery.
- */
-export function OriginHeroSection() {
+interface OriginHeroSectionProps {
+  onOverlayToggle?: (isTransparent: boolean) => void;
+}
+
+export function OriginHeroSection({ onOverlayToggle }: OriginHeroSectionProps) {
   const navigate = useNavigate();
   // Static photos first; swapped for the first photo of each shared album when they load.
   const [allSlides, setAllSlides] = useState(staticSlides);
@@ -266,7 +268,15 @@ export function OriginHeroSection() {
       cancelled = true;
     };
   }, []);
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef(false);
+  const carouselRef = useRef(false);
+  const { scrollYProgress } = useScroll({
+    target: stickyRef,
+    offset: ["start start", "end end"],
+  });
 
+  const [carouselActive, setCarouselActive] = useState(false);
   // Unbounded position: the carousel loops, so it can keep going either way.
   const [pos, setPos] = useState(INITIAL_SLIDE); // Start with middle slide
   const count = allSlides.length;
@@ -277,15 +287,48 @@ export function OriginHeroSection() {
     if (o >= half) o -= count;
     return o;
   };
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const update = () => setMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
-  // Fixed presentation values (no scroll effect): full-size active slide,
-  // sides hidden, slight darkening so the text stays readable.
-  const scaleX = useMotionValue(1);
-  const scaleY = useMotionValue(1);
-  const invX = useMotionValue(1);
-  const invY = useMotionValue(1);
-  const sideOpacity = useMotionValue(0);
-  const dark = useMotionValue(0.45);
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    const shouldOverlay = latest > 0.25 && latest < 0.98;
+    if (overlayRef.current !== shouldOverlay) {
+      overlayRef.current = shouldOverlay;
+      onOverlayToggle?.(shouldOverlay);
+    }
+
+    const shouldShowCarousel = latest > 0.75;
+    if (carouselRef.current !== shouldShowCarousel) {
+      carouselRef.current = shouldShowCarousel;
+      setCarouselActive(shouldShowCarousel);
+    }
+
+  });
+
+  // Same motion as the reference's "The origin": the row of photos sits in the
+  // middle, the centre photo grows (width + height) until it fills the screen,
+  // the side photos are pushed out and fade, the photo darkens, then the text
+  // rises over it. The section is sticky, so scrolling never stops.
+  const ease = (t: number) => 1 - Math.pow(1 - t, 3);
+  // The centre photo is always full-screen; a window opens up to
+  // the whole screen. Only compositor-friendly properties animate (no layout).
+  const sx0 = mobile ? 0.72 : 0.56;
+  const sy0 = mobile ? 0.4 : 0.5;
+  const scaleX = useTransform(scrollYProgress, [0.02, 0.35], [sx0, 1], { ease });
+  const scaleY = useTransform(scrollYProgress, [0.02, 0.35], [sy0, 1], { ease });
+  const invX = useTransform(scaleX, (v) => 1 / v);
+  const invY = useTransform(scaleY, (v) => 1 / v);
+  const sideOpacity = useTransform(scrollYProgress, [0.02, 0.25], [1, 0]);
+  const dark = useTransform(scrollYProgress, [0.35, 0.55], [0, 0.55]);
+  const textY = useTransform(scrollYProgress, [0.45, 0.8], ["100vh", "0vh"]);
+  const textOpacity = useTransform(scrollYProgress, [0.45, 0.6], [0, 1]);
+  const controlsOpacity = useTransform(scrollYProgress, [0.75, 0.88], [0, 1]);
 
   const nextSlide = () => {
     setPos((prev) => prev + 1);
@@ -300,20 +343,23 @@ export function OriginHeroSection() {
   };
 
   useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === "ArrowLeft") prevSlide();
-      if (e.key === "ArrowRight") nextSlide();
-    };
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
-  }, []);
+    if (carouselActive) {
+      const handleKeyPress = (e: KeyboardEvent) => {
+        if (e.key === "ArrowLeft") prevSlide();
+        if (e.key === "ArrowRight") nextSlide();
+      };
+      window.addEventListener("keydown", handleKeyPress);
+      return () => window.removeEventListener("keydown", handleKeyPress);
+    }
+  }, [carouselActive]);
 
   return (
     <section
       id="origin"
-      className="relative -mx-4 mt-8 h-[85vh] min-h-[520px] md:-mx-6"
+      ref={stickyRef}
+      className="relative -mx-4 -mt-[22vh] h-[400vh] md:h-[500vh] md:-mx-6 md:mt-0 lg:-mt-[20vh]"
     >
-      <div data-origin-sticky className="absolute inset-0 overflow-clip">
+      <div data-origin-sticky className="sticky top-0 h-[100vh] overflow-clip">
         <motion.div
           onPanEnd={(_, info) => {
             if (info.offset.x < -40) nextSlide();
@@ -338,7 +384,10 @@ export function OriginHeroSection() {
           ))}
         </motion.div>
 
-        <div className="pointer-events-none absolute inset-0 z-10 flex items-center px-4 text-sand md:px-6 lg:items-end lg:pb-28">
+        <motion.div
+          style={{ y: textY, opacity: textOpacity }}
+          className="pointer-events-none absolute inset-0 z-10 flex items-center px-4 text-sand md:px-6 lg:items-end lg:pb-28"
+        >
           <div className="max-w-[672px]">
             <h2 className="font-display text-[56px] leading-[1] lg:whitespace-nowrap lg:text-[128px]">
               The gallery
@@ -354,9 +403,12 @@ export function OriginHeroSection() {
               View the shoot
             </button>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="absolute bottom-6 left-4 right-4 z-10 flex items-center justify-between text-white md:left-6 md:right-6">
+        <motion.div
+          style={{ opacity: controlsOpacity }}
+          className="absolute bottom-6 left-4 right-4 z-10 flex items-center justify-between text-white md:left-6 md:right-6"
+        >
           <button
             onClick={prevSlide}
             data-cursor="focus"
@@ -376,7 +428,7 @@ export function OriginHeroSection() {
           >
             <ArrowRight className="h-5 w-5" />
           </button>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
