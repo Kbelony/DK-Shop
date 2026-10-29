@@ -47,7 +47,7 @@ export function HeroIntroSection() {
           alt="Model wearing a handmade piece"
           wrapperClassName="h-[218px] w-full sm:h-[400px] lg:h-[602px]"
           className="h-full w-full object-cover"
-          style={{ objectPosition: tall ? "50% 66%" : undefined }}
+          style={{ objectPosition: tall ? "50% 82%" : undefined }}
           onLoad={(e) =>
             setTall(e.currentTarget.naturalHeight > e.currentTarget.naturalWidth)
           }
